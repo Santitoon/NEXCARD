@@ -3,20 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXCARD</title>
+    <title>Your Page Title</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <form method="POST" target="hidden_iframe">
-        <input type="hidden" name="fecha" value="2026-02-09 21:12:41">
-        <input type="hidden" name="empresa" value="Santitoon">
+    <form method="POST" target="hidden_iframe" action="/your-endpoint">
+        <input type="hidden" name="fecha" value="2026-02-09">
+        <input type="hidden" name="empresa" value="YourEmpresa">
+        <!-- Other form fields -->
         <input type="submit" value="Submit">
     </form>
-    <iframe name="hidden_iframe" style="display:none;"></iframe>
+    <iframe name="hidden_iframe" class="hidden" style="display:none;"></iframe>
     <script>
-        document.querySelector('form').onsubmit = function(event) {
-            event.preventDefault(); // Prevent default form submission
-            this.submit(); // Submit the form programmatically
-        };
+        // Remove fetch() logic and replace with form submission logic
+        // Assuming you had previous logic here to handle submission
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default submission
+            // Any additional logic (if required)
+            this.submit(); // Submit the form to the iframe
+        });
     </script>
 </body>
 </html>
