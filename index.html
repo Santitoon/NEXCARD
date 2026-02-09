@@ -564,7 +564,7 @@
             errorContainer.innerHTML = '';
             submitBtn.disabled = true;
 
-            // Obtener datos del formulario
+            // Obtener datos del formulario para validación
             const nombre = document.getElementById('nombre').value.trim();
             const email = document.getElementById('email').value.trim();
             const empresa_cliente = document.getElementById('empresa_cliente').value.trim();
@@ -587,7 +587,8 @@
 
             // Obtener intereses seleccionados
             const interesesCheckboxes = document.querySelectorAll('input[name="intereses"]:checked');
-            const intereses = Array.from(interesesCheckboxes).map(cb => cb.value).join(', ');
+            const interesesArray = Array.from(interesesCheckboxes).map(cb => cb.value);
+            const intereses = interesesArray.join(', ');
 
             if (interesesCheckboxes.length === 0) {
                 showError('Por favor selecciona al menos un servicio de interés.');
@@ -599,15 +600,19 @@
             submitBtn.innerHTML = '<div class="spinner"></div> Enviando...';
 
             try {
-                // Crear FormData con todos los campos
+                // Crear FormData directamente del formulario HTML
+                // Esto incluye automáticamente: nombre, empresa_cliente, email, telefono, vendedor
                 const formData = new FormData(form);
                 
-                // Agregar campos adicionales
+                // Agregar campos adicionales que no están en el formulario HTML
                 formData.append('fecha', new Date().toLocaleString('es-PA'));
                 formData.append('empresa', EMPRESA);
-                formData.append('intereses', intereses);
-
-                // Enviar a Google Apps Script
+                
+                // Los checkboxes con name="intereses" se envían automáticamente en FormData
+                // FormData captura todos los valores de checkboxes seleccionados con el mismo name
+                
+                // Enviar a Google Apps Script usando FormData
+                // FormData se envía como multipart/form-data automáticamente
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
                     body: formData
