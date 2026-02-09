@@ -177,7 +177,9 @@
             margin-bottom: 0.5rem;
         }
 
-        .form-group input,
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
         .form-group select {
             width: 100%;
             height: 3rem;
@@ -218,6 +220,34 @@
         .form-group select option {
             color: #1a1a1a;
             background: white;
+        }
+
+        /* Checkboxes styling */
+        .checkboxes-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: #FF8C42;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #1a1a1a;
         }
 
         .error-message {
@@ -393,13 +423,13 @@
 
         .footer-info p {
             font-size: 0.75rem;
-            color: #6b6b6b;
+            color: #4a4a4a;
             margin: 0.25rem 0;
         }
 
         .footer-info .company {
             font-weight: 600;
-            color: #1a1a1a;
+            color: #0F3A6B;
             margin-bottom: 0.5rem;
         }
 
@@ -447,14 +477,17 @@
                 <form id="registrationForm" class="form-section">
                     <div id="errorContainer"></div>
 
+                    <!-- Campo oculto para vendedor -->
+                    <input type="hidden" name="vendedor" id="vendedor">
+
                     <div class="form-group">
-                        <label for="name">Nombre completo *</label>
-                        <input type="text" id="name" name="name" placeholder="Tu nombre" required>
+                        <label for="nombre">Nombre completo *</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="company">Empresa / Negocio</label>
-                        <input type="text" id="company" name="company" placeholder="Tu empresa">
+                        <label for="empresa_cliente">Empresa / Negocio</label>
+                        <input type="text" id="empresa_cliente" name="empresa_cliente" placeholder="Tu empresa">
                     </div>
 
                     <div class="form-group">
@@ -463,18 +496,26 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="phone">Teléfono</label>
-                        <input type="tel" id="phone" name="phone" placeholder="+507 XXXX-XXXX">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" placeholder="+507 XXXX-XXXX">
                     </div>
 
                     <div class="form-group">
-                        <label for="service">Servicio de Interés</label>
-                        <select id="service" name="service">
-                            <option value="">Selecciona un servicio</option>
-                            <option value="limpieza-trampas">Limpieza de Trampas de Grasas</option>
-                            <option value="limpieza-campanas">Limpieza de Campanas de Cocina</option>
-                            <option value="destape-tuberias">Destape de Tuberías Obstruidas</option>
-                        </select>
+                        <label>Servicios de Interés</label>
+                        <div class="checkboxes-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="interes1" name="intereses" value="Limpieza de Trampas de Grasas">
+                                <label for="interes1">Limpieza de Trampas de Grasas</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="interes2" name="intereses" value="Limpieza de Campanas de Cocina">
+                                <label for="interes2">Limpieza de Campanas de Cocina</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="interes3" name="intereses" value="Destape de Tuberías Obstruidas">
+                                <label for="interes3">Destape de Tuberías Obstruidas</label>
+                            </div>
+                        </div>
                     </div>
 
                     <button type="submit" class="submit-btn" id="submitBtn">
@@ -495,89 +536,91 @@
     </div>
 
     <script>
+        // Función para obtener parámetros de la URL
         function getParam(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param) || '';
         }
 
+        // Obtener parámetros de la URL
         const EMPRESA = getParam('empresa') || 'Trampa Clean';
-        const VENDEDOR = getParam('vendedor') || 'Desconocido';
+        const VENDEDOR_PARAM = getParam('vendedor') || 'Desconocido';
+
+        // Insertar vendedor en el campo oculto cuando la página carga
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('vendedor').value = VENDEDOR_PARAM;
+        });
 
         const form = document.getElementById('registrationForm');
         const submitBtn = document.getElementById('submitBtn');
         const errorContainer = document.getElementById('errorContainer');
         const appContainer = document.getElementById('app');
 
-        const SERVICES = {
-            'limpieza-trampas': 'Limpieza de Trampas de Grasas',
-            'limpieza-campanas': 'Limpieza de Campanas de Cocina',
-            'destape-tuberias': 'Destape de Tuberías Obstruidas'
-        };
+        // URL de Google Apps Script
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoDsolmTmHDAYM-WpkI9gwM7IndzbLQVHd46plrZXUnKaGS2X2UwYbXBdY3aDif0FE/exec';
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             errorContainer.innerHTML = '';
             submitBtn.disabled = true;
 
-            // Get form data
-            const formData = {
-                name: document.getElementById('name').value,
-                company: document.getElementById('company').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                service: document.getElementById('service').value
-            };
+            // Obtener datos del formulario
+            const nombre = document.getElementById('nombre').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const empresa_cliente = document.getElementById('empresa_cliente').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
 
-            // Validate
-            if (!formData.name || !formData.email) {
-                showError('Por favor completa los campos requeridos.');
+            // Validar campos requeridos
+            if (!nombre || !email) {
+                showError('Por favor completa los campos requeridos (Nombre y Email).');
                 submitBtn.disabled = false;
                 return;
             }
 
+            // Validar email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(formData.email)) {
+            if (!emailRegex.test(email)) {
                 showError('Por favor ingresa un email válido.');
                 submitBtn.disabled = false;
                 return;
             }
 
-            // Show loading state
+            // Obtener intereses seleccionados
+            const interesesCheckboxes = document.querySelectorAll('input[name="intereses"]:checked');
+            const intereses = Array.from(interesesCheckboxes).map(cb => cb.value).join(', ');
+
+            if (interesesCheckboxes.length === 0) {
+                showError('Por favor selecciona al menos un servicio de interés.');
+                submitBtn.disabled = false;
+                return;
+            }
+
+            // Mostrar estado de carga
             submitBtn.innerHTML = '<div class="spinner"></div> Enviando...';
 
             try {
-                // Prepare data for Google Sheets
-                const dataToSend = {
-                    fecha: new Date().toLocaleString('es-PA'),
-                    empresa: EMPRESA,
-                    vendedor: VENDEDOR,
-                    nombre: formData.name,
-                    empresa_cliente: formData.company,
-                    email: formData.email,
-                    telefono: formData.phone,
-                    servicio: formData.service ? SERVICES[formData.service] : 'No especificado'
-                };
+                // Crear FormData con todos los campos
+                const formData = new FormData(form);
+                
+                // Agregar campos adicionales
+                formData.append('fecha', new Date().toLocaleString('es-PA'));
+                formData.append('empresa', EMPRESA);
+                formData.append('intereses', intereses);
 
-                // Google Apps Script URL for saving to Google Sheets
-                const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoDsolmTmHDAYM-WpkI9gwM7IndzbLQVHd46plrZXUnKaGS2X2UwYbXBdY3aDif0FE/exec';
-
-                // Send to Google Sheets
-                await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                // Enviar a Google Apps Script
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(dataToSend)
+                    body: formData
                 });
 
-                // Wait for animation
+                // Esperar un poco para la animación
                 await new Promise(resolve => setTimeout(resolve, 1500));
 
-                // Show success
-                showSuccess(formData, dataToSend);
+                // Mostrar pantalla de éxito
+                showSuccess(nombre, email, empresa_cliente, intereses);
 
             } catch (error) {
+                console.error('Error:', error);
                 showError('Error al procesar tu solicitud. Por favor intenta de nuevo.');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Registrarme';
@@ -588,7 +631,7 @@
             errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
         }
 
-        function showSuccess(formData, dataToSend) {
+        function showSuccess(nombre, email, empresa_cliente, intereses) {
             const successHTML = `
                 <div class="success-container">
                     <div class="success-card">
@@ -602,9 +645,10 @@
                         
                         <div class="success-data">
                             <p>Datos registrados:</p>
-                            <p>${formData.name}</p>
-                            <p>${formData.email}</p>
-                            ${formData.service ? `<p>Servicio: ${SERVICES[formData.service]}</p>` : ''}
+                            <p><strong>Nombre:</strong> ${nombre}</p>
+                            <p><strong>Email:</strong> ${email}</p>
+                            ${empresa_cliente ? `<p><strong>Empresa:</strong> ${empresa_cliente}</p>` : ''}
+                            <p><strong>Servicios:</strong> ${intereses}</p>
                         </div>
 
                         <p style="font-size: 0.875rem; color: #6b6b6b;">Puedes cerrar esta ventana o escanear otro código QR.</p>
@@ -614,7 +658,7 @@
 
             appContainer.innerHTML = successHTML;
 
-            // Auto-hide after 4 seconds
+            // Auto-reload después de 4 segundos
             setTimeout(() => {
                 location.reload();
             }, 4000);
