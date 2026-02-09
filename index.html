@@ -222,32 +222,29 @@
             background: white;
         }
 
-        /* Checkboxes styling */
-        .checkboxes-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+        /* Smooth animation for select dropdown */
+        .form-group select {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+        .form-group select:hover {
+            border-color: #FF8C42;
+            box-shadow: 0 0 0 1px #FF8C42;
         }
 
-        .checkbox-item input[type="checkbox"] {
-            width: 1.25rem;
-            height: 1.25rem;
-            cursor: pointer;
-            accent-color: #FF8C42;
+        .form-group select:focus {
+            animation: selectFocus 0.4s ease-out;
         }
 
-        .checkbox-item label {
-            margin: 0;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            color: #1a1a1a;
+        @keyframes selectFocus {
+            from {
+                transform: scale(0.98);
+                opacity: 0.8;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .error-message {
@@ -501,21 +498,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Servicios de Interés</label>
-                        <div class="checkboxes-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="interes1" name="intereses" value="Limpieza de Trampas de Grasas">
-                                <label for="interes1">Limpieza de Trampas de Grasas</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="interes2" name="intereses" value="Limpieza de Campanas de Cocina">
-                                <label for="interes2">Limpieza de Campanas de Cocina</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="interes3" name="intereses" value="Destape de Tuberías Obstruidas">
-                                <label for="interes3">Destape de Tuberías Obstruidas</label>
-                            </div>
-                        </div>
+                        <label for="intereses">Servicios de Interés</label>
+                        <select id="intereses" name="intereses">
+                            <option value="">Selecciona un servicio</option>
+                            <option value="Limpieza de Trampas de Grasas">Limpieza de Trampas de Grasas</option>
+                            <option value="Limpieza de Campanas de Cocina">Limpieza de Campanas de Cocina</option>
+                            <option value="Destape de Tuberías Obstruidas">Destape de Tuberías Obstruidas</option>
+                        </select>
                     </div>
 
                     <button type="submit" class="submit-btn" id="submitBtn">
@@ -585,13 +574,11 @@
                 return;
             }
 
-            // Obtener intereses seleccionados
-            const interesesCheckboxes = document.querySelectorAll('input[name="intereses"]:checked');
-            const interesesArray = Array.from(interesesCheckboxes).map(cb => cb.value);
-            const intereses = interesesArray.join(', ');
+            // Obtener servicio seleccionado
+            const intereses = document.getElementById('intereses').value;
 
-            if (interesesCheckboxes.length === 0) {
-                showError('Por favor selecciona al menos un servicio de interés.');
+            if (!intereses) {
+                showError('Por favor selecciona un servicio de interés.');
                 submitBtn.disabled = false;
                 return;
             }
