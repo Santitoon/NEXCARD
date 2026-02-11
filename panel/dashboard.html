@@ -35,6 +35,7 @@
 
     a{ color:inherit; text-decoration:none; }
     .container{ width:min(1120px, 92%); margin-inline:auto; }
+    .btn-sm{ padding:.55rem .75rem; border-radius: 999px; font-weight:850; }
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       gap:.6rem;
@@ -721,6 +722,7 @@
                 <div class="hint" style="margin: .25rem 0 0;">Busca, filtra y revisa los leads captados por tus tarjetas.</div>
               </div>
               <div class="actions">
+                <button class="btn btn-ghost" id="btnNew" type="button">+ Nuevo</button>
                 <button class="btn btn-ghost" id="btnExport" type="button">Exportar CSV</button>
                 <button class="btn btn-primary" id="btnRefresh" type="button">
                   <span class="spinner" id="spLoad" style="display:none;"></span>
@@ -771,6 +773,7 @@
                     <th>Teléfono</th>
                     <th>Correo</th>
                     <th>Interés</th>
+                                      <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody id="tbody"></tbody>
@@ -812,6 +815,62 @@
       </div>
     </div>
   </footer>
+
+
+  <!-- Modal: editar/crear -->
+  <div class="demo-overlay" id="editOverlay" aria-hidden="true" style="display:none;">
+    <div class="demo-modal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+      <div class="demo-head">
+        <div>
+          <div class="demo-title" id="editTitle">Editar contacto</div>
+          <div style="color:var(--muted); font-weight:750; margin-top:.2rem;" id="editSub">Actualiza campos y guarda.</div>
+        </div>
+        <button class="demo-close" id="editCloseBtn" type="button">Cerrar</button>
+      </div>
+
+      <div class="demo-body">
+        <form class="demo-form" id="editForm">
+          <input type="hidden" id="fId">
+          <div class="demo-field full">
+            <label>Nombre</label>
+            <input id="fNombre2" type="text" required>
+          </div>
+          <div class="demo-field">
+            <label>Teléfono</label>
+            <input id="fTelefono2" type="text" required>
+          </div>
+          <div class="demo-field">
+            <label>Correo</label>
+            <input id="fEmail2" type="email" required>
+          </div>
+          <div class="demo-field">
+            <label>Vendedor</label>
+            <input id="fVendedor2" type="text" placeholder="Ej: Juan">
+          </div>
+          <div class="demo-field">
+            <label>Tarjeta</label>
+            <input id="fTarjeta2" type="text" placeholder="Ej: CARD-0001">
+          </div>
+          <div class="demo-field full">
+            <label>Interés</label>
+            <input id="fInteres2" type="text" placeholder="Ej: Mantenimiento">
+          </div>
+
+          <div class="full" style="display:flex; gap:.7rem; flex-wrap:wrap; margin-top:.25rem;">
+            <button class="btn btn-primary" type="submit" id="btnSave">
+              <span class="spinner" id="spSave" style="display:none;"></span>
+              Guardar
+            </button>
+            <button class="btn btn-ghost" type="button" id="btnCancelEdit">Cancelar</button>
+          </div>
+        </form>
+        <div class="hint" style="margin-top:.85rem;">
+          Para poder editar/borrar en modo API, el backend debe soportar <code>updateContact</code> y <code>deleteContact</code>.
+          En modo DEMO funciona de inmediato.
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="toast" id="toast" aria-live="polite">
     <div class="t" id="toastTitle"></div>
@@ -886,14 +945,21 @@
       els.tbody.innerHTML = '';
       for (const r of rows){
         const tr = document.createElement('tr');
+        const rid = r.id || r.ID || r._id || "";
         tr.innerHTML = `
-          <td>${fmtDate(r.timestamp || r.fecha || r.date)}</td>
-          <td>${NexcardUI.escape(r.tarjeta_id || r.tarjeta || '')}</td>
-          <td>${NexcardUI.escape(r.vendedor_id || r.vendedor || '')}</td>
-          <td>${NexcardUI.escape(r.nombre || r.name || '')}</td>
-          <td>${NexcardUI.escape(r.telefono || r.phone || '')}</td>
-          <td>${NexcardUI.escape(r.email || '')}</td>
-          <td>${NexcardUI.escape(r.interes || r.nota || '')}</td>
+          <td>${fmtDate(r.timestamp || r.fecha || r.date || r.Fecha || '')}</td>
+          <td>${NexcardUI.escape(r.tarjeta_id || r.tarjeta || r.Tarjeta || '')}</td>
+          <td>${NexcardUI.escape(r.vendedor_id || r.vendedor || r.Vendedor || '')}</td>
+          <td>${NexcardUI.escape(r.nombre || r.name || r.Nombre || '')}</td>
+          <td>${NexcardUI.escape(r.telefono || r.phone || r.Teléfono || r.Telefono || '')}</td>
+          <td>${NexcardUI.escape(r.email || r.Correo || '')}</td>
+          <td>${NexcardUI.escape(r.interes || r.nota || r.Interés || r.Interes || '')}</td>
+          <td>
+            <div style="display:flex; gap:.45rem; justify-content:flex-end;">
+              <button class="btn btn-ghost btn-sm" data-act="edit" data-id="${NexcardUI.escapeAttr(rid)}" type="button">✏️</button>
+              <button class="btn btn-ghost btn-sm" data-act="del" data-id="${NexcardUI.escapeAttr(rid)}" type="button">🗑️</button>
+            </div>
+          </td>
         `;
         els.tbody.appendChild(tr);
       }
@@ -991,7 +1057,119 @@
       }
     });
 
-    // boot
+    
+    // modal helpers
+    const editOverlay = document.getElementById('editOverlay');
+    const editCloseBtn = document.getElementById('editCloseBtn');
+    const btnCancelEdit = document.getElementById('btnCancelEdit');
+    const editForm = document.getElementById('editForm');
+    const btnNew = document.getElementById('btnNew');
+    const btnSave = document.getElementById('btnSave');
+    const spSave = document.getElementById('spSave');
+    const editTitle = document.getElementById('editTitle');
+    const editSub = document.getElementById('editSub');
+
+    function openEditModal(mode, row){
+      const isNew = mode === 'new';
+      editTitle.textContent = isNew ? 'Nuevo contacto' : 'Editar contacto';
+      editSub.textContent = isNew ? 'Crea un registro nuevo en tu base.' : 'Actualiza campos y guarda.';
+      document.getElementById('fId').value = row?.id || row?.ID || row?._id || '';
+      document.getElementById('fNombre2').value = row?.nombre || row?.Nombre || '';
+      document.getElementById('fTelefono2').value = row?.telefono || row?.Teléfono || row?.Telefono || '';
+      document.getElementById('fEmail2').value = row?.email || row?.Correo || '';
+      document.getElementById('fVendedor2').value = row?.vendedor_id || row?.Vendedor || '';
+      document.getElementById('fTarjeta2').value = row?.tarjeta_id || row?.Tarjeta || '';
+      document.getElementById('fInteres2').value = row?.interes || row?.Interés || row?.Interes || '';
+
+      editOverlay.style.display = 'flex';
+      editOverlay.classList.add('show');
+      editOverlay.setAttribute('aria-hidden','false');
+    }
+    function closeEditModal(){
+      editOverlay.classList.remove('show');
+      editOverlay.style.display = 'none';
+      editOverlay.setAttribute('aria-hidden','true');
+    }
+    editCloseBtn.addEventListener('click', closeEditModal);
+    btnCancelEdit.addEventListener('click', closeEditModal);
+    editOverlay.addEventListener('click', (e) => { if (e.target === editOverlay) closeEditModal(); });
+
+    // New
+    btnNew.addEventListener('click', () => openEditModal('new', {}));
+
+    // Table actions
+    document.getElementById('tbl').addEventListener('click', async (e) => {
+      const btn = e.target.closest('button[data-act]');
+      if (!btn) return;
+      const act = btn.getAttribute('data-act');
+      const id = btn.getAttribute('data-id') || '';
+      const row = state.rows.find(r => String(r.id||r.ID||r._id||'') === String(id));
+
+      if (act === 'edit'){
+        if (!row){
+          NexcardUI.toast('No encontrado', 'No pude localizar ese registro en la tabla actual.');
+          return;
+        }
+        openEditModal('edit', row);
+      } else if (act === 'del'){
+        if (!id){
+          NexcardUI.toast('Falta ID', 'Para borrar necesitas un ID único por registro.');
+          return;
+        }
+        if (!confirm('¿Seguro que quieres borrar este contacto?')) return;
+        try{
+          setLoading(true);
+          await NexcardAPI.deleteContact({ id });
+          NexcardUI.toast('Listo', 'Contacto eliminado.');
+          state.page = 1;
+          await loadStats();
+          await loadContacts();
+        }catch(err){
+          NexcardUI.toast('No se pudo borrar', err?.message || String(err));
+        }finally{
+          setLoading(false);
+        }
+      }
+    });
+
+    // Save
+    editForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('fId').value.trim();
+      const data = {
+        nombre: document.getElementById('fNombre2').value.trim(),
+        telefono: document.getElementById('fTelefono2').value.trim(),
+        email: document.getElementById('fEmail2').value.trim(),
+        vendedor_id: document.getElementById('fVendedor2').value.trim(),
+        tarjeta_id: document.getElementById('fTarjeta2').value.trim(),
+        interes: document.getElementById('fInteres2').value.trim(),
+      };
+
+      btnSave.disabled = true;
+      spSave.style.display = 'inline-block';
+      try{
+        if (id){
+          await NexcardAPI.updateContact({ id, patch: data });
+          NexcardUI.toast('Guardado', 'Cambios aplicados.');
+        } else {
+          const created = await NexcardAPI.createContact({ data });
+          NexcardUI.toast('Creado', `Contacto creado${created?.id ? ' ('+created.id+')' : ''}.`);
+        }
+        closeEditModal();
+        state.page = 1;
+        await loadVendedores();
+        await loadStats();
+        await loadContacts();
+      }catch(err){
+        NexcardUI.toast('No se pudo guardar', err?.message || String(err));
+      }finally{
+        btnSave.disabled = false;
+        spSave.style.display = 'none';
+      }
+    });
+
+
+// boot
     (async function(){
       try{
         await NexcardAuth.requireAuth(); // redirects if not logged

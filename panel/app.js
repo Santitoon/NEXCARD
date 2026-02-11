@@ -237,6 +237,69 @@
       const url = `${API_BASE}?${qs.toString()}`;
       return await httpJson(url, { headers: { "Authorization": "Bearer " + token } });
     },
+    
+    async createContact(payload){
+      const p = payload || {};
+      if (isDemo()){
+        const data = p.data || {};
+        const id = "DEMO-" + Math.random().toString(16).slice(2,8).toUpperCase();
+        const row = {
+          id,
+          timestamp: new Date().toISOString(),
+          tarjeta_id: data.tarjeta_id || "",
+          vendedor_id: data.vendedor_id || "",
+          nombre: data.nombre || "",
+          telefono: data.telefono || "",
+          email: data.email || "",
+          interes: data.interes || ""
+        };
+        DEMO.contacts.unshift(row);
+        return { ok:true, id };
+      }
+      const token = getToken();
+      const url = `${API_BASE}?action=createContact`;
+      return await httpJson(url, {
+        method: "POST",
+        headers: { "content-type":"application/json", "Authorization":"Bearer "+token },
+        body: JSON.stringify(p)
+      });
+    },
+    async updateContact(payload){
+      const p = payload || {};
+      if (!p.id) throw new Error("Falta id.");
+      if (isDemo()){
+        const idx = DEMO.contacts.findIndex(r => String(r.id) === String(p.id));
+        if (idx < 0) throw new Error("No encontrado.");
+        const patch = p.patch || {};
+        DEMO.contacts[idx] = { ...DEMO.contacts[idx], ...patch };
+        return { ok:true };
+      }
+      const token = getToken();
+      const url = `${API_BASE}?action=updateContact`;
+      return await httpJson(url, {
+        method: "POST",
+        headers: { "content-type":"application/json", "Authorization":"Bearer "+token },
+        body: JSON.stringify(p)
+      });
+    },
+    async deleteContact(payload){
+      const p = payload || {};
+      if (!p.id) throw new Error("Falta id.");
+      if (isDemo()){
+        const idx = DEMO.contacts.findIndex(r => String(r.id) === String(p.id));
+        if (idx < 0) throw new Error("No encontrado.");
+        DEMO.contacts.splice(idx,1);
+        return { ok:true };
+      }
+      const token = getToken();
+      const url = `${API_BASE}?action=deleteContact`;
+      return await httpJson(url, {
+        method: "POST",
+        headers: { "content-type":"application/json", "Authorization":"Bearer "+token },
+        body: JSON.stringify(p)
+      });
+    },
+
     async exportCSV(filters){
       const f = filters || {};
       if (isDemo()){
