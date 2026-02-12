@@ -4,7 +4,7 @@
 //
 // 2) Si API_BASE queda vacío, el panel corre en modo DEMO.
 window.NEXCARD_CONFIG = {
-  API_BASE: "",
+  API_BASE: "1aWpOq_4AfxBJZ8VgCnWevmqLI2XLBpwblYgtzcvEIQI",
   APP_NAME: "NEXCARD",
   TOKEN_KEY: "nexcard_token_v1"
 };
