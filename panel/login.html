@@ -135,6 +135,21 @@ input:focus{border-color: rgba(37,99,235,.45); box-shadow: 0 0 0 4px rgba(37,99,
 }
 .rightTitle{font-size:18px; margin:0 0 10px 0}
 .sep{height:1px;background:var(--line); margin:14px 0}
+
+.glass-card{
+  background: rgba(255,255,255,.55) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,.35);
+  box-shadow: 0 30px 80px rgba(15,23,42,.18);
+  transform: translateY(-6px);
+  transition: all .4s ease;
+}
+.glass-card:hover{
+  transform: translateY(-10px);
+  box-shadow: 0 40px 100px rgba(15,23,42,.25);
+}
+
 </style>
 </head>
 <body>
@@ -152,7 +167,7 @@ input:focus{border-color: rgba(37,99,235,.45); box-shadow: 0 0 0 4px rgba(37,99,
   </div>
 
   <div class="main">
-    <div class="card">
+    <div class="card glass-card">
       <div class="card-inner">
         <div class="box">
           <div class="pill"><span class="dot"></span> Panel</div>
