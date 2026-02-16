@@ -1,22 +1,8 @@
 
 (function(){
   const CFG = window.NEXCARD_CONFIG || {};
-  const API_BASE = CFG.API_BASE || "";
+  const API_BASE = (CFG.API_BASE || "").trim();
   const TOKEN_KEY = CFG.TOKEN_KEY || "nexcard_token_v1";
-
-  const UI = {
-    toast(msg){
-      const t = document.getElementById("toast");
-      if (!t) return alert(msg);
-      t.textContent = msg;
-      t.style.display = "block";
-      clearTimeout(UI._tm);
-      UI._tm = setTimeout(()=> t.style.display="none", 2800);
-    },
-    escape(s){
-      return String(s ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-    }
-  };
 
   function jsonp(url){
     return new Promise((resolve, reject) => {
@@ -33,7 +19,7 @@
       script.onerror = () => {
         try { delete window[cb]; } catch {}
         script.remove();
-        reject(new Error("JSONP load failed"));
+        reject(new Error("No se pudo conectar con el servidor."));
       };
       script.src = u.toString();
       document.body.appendChild(script);
@@ -45,9 +31,9 @@
   function tokenClear(){ localStorage.removeItem(TOKEN_KEY); }
 
   function apiUrl(params){
-    if (!API_BASE || API_BASE.includes("PEGA_AQUI")) throw new Error("API_BASE no configurado en panel/config.js");
+    if (!API_BASE || API_BASE.includes("PEGA_AQUI")) throw new Error("Configura el panel antes de iniciar sesión.");
     const u = new URL(API_BASE);
-    Object.entries(params || {}).forEach(([k,v]) => {
+    Object.entries(params || {}).forEach(([k,v])=>{
       if (v === undefined || v === null || v === "") return;
       u.searchParams.set(k, String(v));
     });
@@ -55,25 +41,14 @@
   }
 
   async function apiCall(params){
-    const u = apiUrl(params);
-    const j = await jsonp(u);
-    if (!j || j.ok === false) throw new Error(j?.message || "Error API");
+    const j = await jsonp(apiUrl(params));
+    if (!j || j.ok === false) throw new Error(j?.message || "Error.");
     return j;
   }
 
-  window.NexcardPanel = {
-    UI,
+  window.Nexcard = {
     tokenGet, tokenSet, tokenClear,
-    async login(email, password){
-      return await apiCall({ action:"login", email, password });
-    },
-    async me(){
-      const token = tokenGet();
-      return await apiCall({ action:"me", token });
-    },
-    async contacts(query){
-      const token = tokenGet();
-      return await apiCall({ action:"contacts", token, ...(query||{}) });
-    }
+    login: (email, password) => apiCall({ action:"login", email, password }),
+    me: () => apiCall({ action:"me", token: tokenGet() })
   };
 })();
