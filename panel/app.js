@@ -19,7 +19,7 @@
       script.onerror = () => {
         try { delete window[cb]; } catch {}
         script.remove();
-        reject(new Error("No se pudo conectar con el servidor."));
+        reject(new Error("No se pudo conectar. Intenta de nuevo."));
       };
       script.src = u.toString();
       document.body.appendChild(script);
@@ -31,7 +31,7 @@
   function tokenClear(){ localStorage.removeItem(TOKEN_KEY); }
 
   function apiUrl(params){
-    if (!API_BASE || API_BASE.includes("PEGA_AQUI")) throw new Error("Configura el panel antes de iniciar sesión.");
+    if (!API_BASE || API_BASE.includes("PEGA_AQUI")) throw new Error("El panel no está configurado.");
     const u = new URL(API_BASE);
     Object.entries(params || {}).forEach(([k,v])=>{
       if (v === undefined || v === null || v === "") return;
@@ -40,15 +40,15 @@
     return u.toString();
   }
 
-  async function apiCall(params){
+  async function call(params){
     const j = await jsonp(apiUrl(params));
-    if (!j || j.ok === false) throw new Error(j?.message || "Error.");
+    if (!j || j.ok === false) throw new Error(j?.message || "No se pudo completar la solicitud.");
     return j;
   }
 
-  window.Nexcard = {
+  window.NexcardPanel = {
     tokenGet, tokenSet, tokenClear,
-    login: (email, password) => apiCall({ action:"login", email, password }),
-    me: () => apiCall({ action:"me", token: tokenGet() })
+    login: (email, password) => call({ action:"login", email, password }),
+    me: () => call({ action:"me", token: tokenGet() })
   };
 })();
