@@ -11,26 +11,15 @@
 
   <style>
     :root{
-      --bg0:#f7fbff;
-      --bg1:#eef4ff;
-      --card:rgba(255,255,255,.72);
+      --bg0:#f7fbff; --bg1:#eef4ff;
+      --card:rgba(255,255,255,.75);
       --border:rgba(6,26,45,.12);
-      --text:#0b1b2a;
-      --muted:#5b6672;
-
-      --navy:#061A2D;
-      --navy2:#0A2A4A;
-      --navy3:#0F3B6A;
-
-      --accent:#21A1FF;
-
-      --shadow: 0 24px 70px rgba(0,0,0,.16);
-      --shadow-soft: 0 12px 28px rgba(6,26,45,.12);
-
-      --r-lg: 22px;
-      --ease: cubic-bezier(.22,1,.36,1);
+      --text:#0b1b2a; --muted:#5b6672;
+      --navy:#061A2D; --navy2:#0A2A4A; --navy3:#0F3B6A;
+      --shadow:0 24px 70px rgba(0,0,0,.16);
+      --shadow-soft:0 12px 28px rgba(6,26,45,.12);
+      --ease:cubic-bezier(.22,1,.36,1);
     }
-
     *{margin:0;padding:0;box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -41,149 +30,107 @@
         radial-gradient(900px 700px at 90% 30%, rgba(99,211,255,.14), transparent 55%),
         linear-gradient(135deg,var(--bg0) 0%, var(--bg1) 100%);
       overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+      padding:22px;
     }
-
-    body::before{
-      content:"";
-      position:fixed; inset:0;
-      pointer-events:none;
-      background-image:
-        linear-gradient(to right, rgba(6,26,45,.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(6,26,45,.05) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: radial-gradient(circle at 30% 20%, rgba(0,0,0,.85), rgba(0,0,0,.12) 55%, transparent 72%);
-      opacity:.35;
-      z-index:0;
-    }
-
-    .bg-accent{
-      position:fixed; inset:-20%;
-      pointer-events:none; z-index:0;
-      filter: blur(42px);
-    }
+    .bg-accent{position:fixed; inset:-20%; pointer-events:none; filter:blur(42px); z-index:0;}
     .bg-accent::before,.bg-accent::after{
-      content:"";
-      position:absolute;
-      width:min(560px, 72vw);
-      height:min(560px, 72vw);
+      content:""; position:absolute;
+      width:min(520px, 72vw); height:min(520px, 72vw);
       border-radius:999px;
       background: radial-gradient(circle at 30% 30%, rgba(33,161,255,.52), rgba(33,161,255,.05) 70%, transparent 72%);
       animation: floatBlob 10s var(--ease) infinite;
     }
-    .bg-accent::before{top: 1%; left: 6%;}
+    .bg-accent::before{top:1%; left:6%}
     .bg-accent::after{
-      bottom: -2%; right: 2%;
+      bottom:-2%; right:2%;
       background: radial-gradient(circle at 30% 30%, rgba(15,59,106,.58), rgba(15,59,106,.08) 70%, transparent 72%);
-      animation-duration: 12s; animation-direction: reverse;
+      animation-duration:12s; animation-direction:reverse;
     }
     @keyframes floatBlob{
-      0%{ transform: translate3d(0,0,0) scale(1); }
-      40%{ transform: translate3d(30px, -25px, 0) scale(1.05); }
-      70%{ transform: translate3d(-18px, 18px, 0) scale(.98); }
-      100%{ transform: translate3d(0,0,0) scale(1); }
-    }
-
-    .wrap{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 22px;
-      position:relative;
-      z-index:2;
+      0%{transform:translate3d(0,0,0) scale(1)}
+      40%{transform:translate3d(30px,-25px,0) scale(1.05)}
+      70%{transform:translate3d(-18px,18px,0) scale(.98)}
+      100%{transform:translate3d(0,0,0) scale(1)}
     }
 
     .panel{
-      width:100%;
-      max-width: 520px;
-      background: rgba(255,255,255,.40);
-      border: 1px solid rgba(255,255,255,.35);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
+      width:min(520px, 92vw);
+      background:rgba(255,255,255,.42);
+      border:1px solid rgba(255,255,255,.35);
+      border-radius:28px;
+      box-shadow:var(--shadow);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       overflow:hidden;
       transform: translateY(10px);
       opacity:0;
       animation: in .7s var(--ease) forwards;
+      z-index:2;
     }
     @keyframes in { to{ transform: translateY(0); opacity:1; } }
 
-    .head{
-      padding: 18px 18px 14px;
+    .card{
+      margin:18px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--shadow-soft);
+      padding:18px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      padding:18px;
       background:
-        radial-gradient(900px 320px at 15% 0%, rgba(33,161,255,.25), transparent 55%),
+        radial-gradient(900px 320px at 15% 0%, rgba(33,161,255,.22), transparent 55%),
         linear-gradient(135deg, var(--navy) 0%, var(--navy2) 55%, var(--navy3) 100%);
-      border-bottom: 1px solid rgba(255,255,255,.10);
       color:white;
-      display:flex; gap:12px; align-items:center;
+      border-bottom:1px solid rgba(255,255,255,.12);
     }
     .mark{
-      width:44px; height:44px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.22);
-      box-shadow: 0 14px 40px rgba(0,0,0,.22);
-      position:relative;
-      overflow:hidden;
+      width:44px;height:44px;border-radius:16px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:0 14px 40px rgba(0,0,0,.22);
+      position:relative; overflow:hidden;
     }
     .mark::after{
-      content:"";
-      position:absolute; inset:-40%;
+      content:""; position:absolute; inset:-40%;
       background: conic-gradient(from 180deg, rgba(33,161,255,0), rgba(33,161,255,.35), rgba(255,255,255,0));
       animation: spin 5s linear infinite;
       opacity:.8;
     }
     @keyframes spin{ to{ transform: rotate(360deg); } }
 
-    .head h1{
-      font-family:'Montserrat',system-ui,sans-serif;
-      font-size: 18px;
-      letter-spacing:-.02em;
-      margin:0;
-    }
-    .head p{
-      color: rgba(255,255,255,.86);
-      font-weight:700;
-      font-size: 12.5px;
-      margin-top:6px;
-    }
+    .brand h1{font-family:'Montserrat',system-ui,sans-serif;font-size:20px;letter-spacing:-.02em}
+    .brand p{margin-top:4px;color:rgba(255,255,255,.85);font-weight:700;font-size:13px}
 
-    .body{
-      padding: 18px;
-      background: var(--card);
-    }
-    .body h2{
+    h2{
       font-family:'Montserrat',system-ui,sans-serif;
-      font-size: 22px;
-      letter-spacing:-.02em;
-      margin-bottom: 6px;
+      font-size:22px; letter-spacing:-.02em;
+      margin-bottom:6px;
     }
-    .body .hint{
-      color: var(--muted);
-      font-weight:700;
-      font-size: 13px;
-      margin-bottom: 14px;
-    }
+    .hint{color:var(--muted);font-weight:700;font-size:13px;margin-bottom:14px}
 
     label{
       display:block;
-      font-size: 12px;
+      font-size:12px;
       font-weight:900;
-      color: rgba(11,27,42,.82);
-      margin: 10px 0 6px;
+      color:rgba(11,27,42,.82);
+      margin:10px 0 6px;
       letter-spacing:.06em;
-      text-transform: uppercase;
+      text-transform:uppercase;
     }
     .in{
       width:100%;
-      height: 48px;
-      padding: 0 14px;
-      border: 1px solid rgba(6,26,45,.12);
-      border-radius: 14px;
-      font-size: 15px;
-      font-weight: 650;
-      background: rgba(255,255,255,.92);
+      height:48px;
+      padding:0 14px;
+      border:1px solid rgba(6,26,45,.12);
+      border-radius:14px;
+      font-size:15px;
+      font-weight:650;
+      background:rgba(255,255,255,.88);
       transition: transform .18s var(--ease), border-color .18s var(--ease), box-shadow .18s var(--ease);
     }
     .in:focus{
@@ -191,22 +138,23 @@
       border-color: rgba(33,161,255,.85);
       box-shadow: 0 0 0 4px rgba(33,161,255,.18), 0 14px 40px rgba(6,26,45,.12);
       transform: translateY(-1px);
-      background: #fff;
+      background:#fff;
     }
 
-    .row{display:flex; gap: 10px; align-items:center; margin-top: 14px}
+    .row{display:flex; gap:10px; margin-top:14px}
     .btn{
-      height: 50px;
-      border: none;
-      border-radius: 16px;
-      font-weight: 900;
-      letter-spacing: .06em;
-      text-transform: uppercase;
+      height:50px;
+      border:none;
+      border-radius:16px;
+      font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
       cursor:pointer;
-      padding: 0 14px;
-      display:flex; align-items:center; justify-content:center; gap: 10px;
+      padding:0 14px;
+      display:flex; align-items:center; justify-content:center; gap:10px;
       transition: transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
       user-select:none;
+      white-space:nowrap;
     }
     .btn-primary{
       flex:1;
@@ -216,20 +164,20 @@
         linear-gradient(135deg, var(--navy) 0%, var(--navy2) 55%, var(--navy3) 100%);
       box-shadow: 0 18px 40px rgba(6,26,45,.26);
     }
-    .btn-primary:hover{transform: translateY(-1px); box-shadow: 0 24px 60px rgba(6,26,45,.34); filter:saturate(1.05)}
+    .btn-primary:hover{transform: translateY(-1px); box-shadow:0 24px 60px rgba(6,26,45,.34); filter:saturate(1.05)}
     .btn-ghost{
-      width: 120px;
-      background: rgba(255,255,255,.70);
-      border: 1px solid rgba(6,26,45,.12);
-      color: var(--navy2);
-      box-shadow: var(--shadow-soft);
+      width:120px;
+      background:rgba(255,255,255,.65);
+      border:1px solid rgba(6,26,45,.12);
+      color:var(--navy2);
+      box-shadow:var(--shadow-soft);
     }
 
     .spinner{
-      width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,.9);
-      border-top-color: transparent;
-      border-radius: 999px;
+      width:16px;height:16px;
+      border:2px solid rgba(255,255,255,.9);
+      border-top-color:transparent;
+      border-radius:999px;
       animation: spin2 .7s linear infinite;
     }
     @keyframes spin2{ to{ transform: rotate(360deg); } }
@@ -244,13 +192,6 @@
       color: #b42318;
       font-weight: 700;
       margin-top: 12px;
-      animation: pop .35s var(--ease);
-    }
-    @keyframes pop{ from{opacity:0; transform: translateY(-6px) scale(.98)} to{opacity:1; transform: translateY(0) scale(1)} }
-
-    @media (prefers-reduced-motion: reduce){
-      *{animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important;}
-      .bg-accent{display:none;}
     }
   </style>
 </head>
@@ -258,49 +199,40 @@
 <body>
   <div class="bg-accent"></div>
 
-  <div class="wrap">
-    <div class="panel" role="dialog" aria-label="Acceso empresas NEXCARD">
-      <div class="head">
-        <div class="mark" aria-hidden="true"></div>
-        <div>
-          <h1>NEXCARD</h1>
-          <p>Acceso privado • token • multiempresa</p>
+  <div class="panel" role="dialog" aria-label="Acceso empresas NEXCARD">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"></div>
+      <div>
+        <h1>NEXCARD</h1>
+        <p>NFC + QR • Leads a Sheets</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Acceso empresas</h2>
+      <div class="hint">Ventana flotante • diseño moderno • seguro con token</div>
+
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input class="in" id="email" type="email" autocomplete="username" required>
+
+        <label for="password">Contraseña</label>
+        <input class="in" id="password" type="password" autocomplete="current-password" required>
+
+        <div class="row">
+          <button class="btn btn-primary" id="btnLogin" type="submit">Entrar</button>
+          <button class="btn btn-ghost" id="btnClear" type="button">Limpiar</button>
         </div>
-      </div>
 
-      <div class="body">
-        <h2>Acceso empresas</h2>
-        <div class="hint">Ventana flotante • diseño moderno • seguro con token</div>
-
-        <form id="loginForm">
-          <label for="email">Email</label>
-          <input class="in" id="email" type="email" autocomplete="username" required>
-
-          <label for="password">Contraseña</label>
-          <input class="in" id="password" type="password" autocomplete="current-password" required>
-
-          <label for="empresa_id">Empresa ID</label>
-          <input class="in" id="empresa_id" type="text" placeholder="empresa_id" required>
-
-          <label for="empresa_alias">Nombre visible (opcional)</label>
-          <input class="in" id="empresa_alias" type="text" placeholder="Nombre visible">
-
-          <div class="row">
-            <button class="btn btn-primary" id="btnLogin" type="submit">Entrar</button>
-            <button class="btn btn-ghost" id="btnClear" type="button">Limpiar</button>
-          </div>
-
-          <div class="err" id="errBox"></div>
-        </form>
-      </div>
+        <div class="err" id="errBox"></div>
+      </form>
     </div>
   </div>
 
   <script>
     const API_BASE = "https://script.google.com/macros/s/AKfycbx7ghGSC47jyKY5ArI2s1JpO3UILEHVzmfaHxYxG3sLYfN3QDyFYWnXFStRLHvdJGtXRQ/exec";
     const TOKEN_KEY = "nexcard_token";
-    const EMPRESA_KEY = "nexcard_empresa_id";
-    const ALIAS_KEY = "nexcard_empresa_alias";
+    const EMPRESA_KEY = "nexcard_empresa_id"; // se usará SOLO si dashboard viene con ?empresa_id=...
 
     function jsonp(url){
       return new Promise((resolve, reject)=>{
@@ -327,17 +259,7 @@
     document.getElementById("btnClear").addEventListener("click", ()=>{
       document.getElementById("email").value = "";
       document.getElementById("password").value = "";
-      document.getElementById("empresa_id").value = "";
-      document.getElementById("empresa_alias").value = "";
       clearErr();
-    });
-
-    // recordar última empresa sin mostrar tips
-    document.addEventListener("DOMContentLoaded", () => {
-      const lastEmp = localStorage.getItem(EMPRESA_KEY) || "";
-      const lastAlias = localStorage.getItem(ALIAS_KEY) || "";
-      if (lastEmp) document.getElementById("empresa_id").value = lastEmp;
-      if (lastAlias) document.getElementById("empresa_alias").value = lastAlias;
     });
 
     document.getElementById("loginForm").addEventListener("submit", async (e)=>{
@@ -346,13 +268,6 @@
 
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-      const empresa_id = document.getElementById("empresa_id").value.trim().toLowerCase();
-      const empresa_alias = document.getElementById("empresa_alias").value.trim() || empresa_id;
-
-      if(!email || !password || !empresa_id){
-        showErr("Completa email, contraseña y Empresa ID.");
-        return;
-      }
 
       const btn = document.getElementById("btnLogin");
       const old = btn.innerHTML;
@@ -368,10 +283,10 @@
         }
 
         localStorage.setItem(TOKEN_KEY, data.token);
-        localStorage.setItem(EMPRESA_KEY, empresa_id);
-        localStorage.setItem(ALIAS_KEY, empresa_alias);
 
-        location.href = `dashboard.html?empresa_id=${encodeURIComponent(empresa_id)}&empresa=${encodeURIComponent(empresa_alias)}`;
+        // NOTA: sin tocar Apps Script, no sabemos empresa aquí.
+        // Dashboard debe obtener empresa desde URL (?empresa_id=...) o un selector interno.
+        location.href = "dashboard.html";
       }catch(err){
         showErr(String(err && err.message ? err.message : err));
         btn.disabled = false;
