@@ -14,6 +14,7 @@
       --bg0:#f7fbff;
       --bg1:#eef4ff;
       --card:rgba(255,255,255,.72);
+      --card2:rgba(255,255,255,.88);
       --border:rgba(6,26,45,.12);
       --text:#0b1b2a;
       --muted:#5b6672;
@@ -23,16 +24,19 @@
       --navy3:#0F3B6A;
 
       --accent:#21A1FF;
+      --accent2:#63D3FF;
 
       --shadow: 0 24px 70px rgba(0,0,0,.16);
-      --shadow-soft: 0 12px 28px rgba(6,26,45,.12);
+      --shadow-soft: 0 12px 30px rgba(6,26,45,.12);
 
+      --r-xl: 28px;
+      --r-lg: 22px;
+      --r-md: 14px;
       --ease: cubic-bezier(.22,1,.36,1);
-      --maxw: 78rem;
     }
 
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{height:100%}
+    *{ margin:0; padding:0; box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       font-family:'Open Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text);
@@ -43,9 +47,11 @@
       overflow-x:hidden;
     }
 
+    /* Grid sutil */
     body::before{
       content:"";
-      position:fixed; inset:0;
+      position:fixed;
+      inset:0;
       pointer-events:none;
       background-image:
         linear-gradient(to right, rgba(6,26,45,.05) 1px, transparent 1px),
@@ -56,19 +62,32 @@
       z-index:0;
     }
 
-    .bg-accent{position:fixed; inset:-20%; pointer-events:none; z-index:0; filter: blur(42px);}
-    .bg-accent::before,.bg-accent::after{
-      content:""; position:absolute;
-      width:min(620px, 72vw); height:min(620px, 72vw);
+    .bg-accent{
+      position:fixed;
+      inset:-20%;
+      pointer-events:none;
+      z-index:0;
+      filter: blur(42px);
+    }
+    .bg-accent::before,
+    .bg-accent::after{
+      content:"";
+      position:absolute;
+      width:min(540px, 70vw);
+      height:min(540px, 70vw);
       border-radius:999px;
       background: radial-gradient(circle at 30% 30%, rgba(33,161,255,.52), rgba(33,161,255,.05) 70%, transparent 72%);
+      transform: translate3d(0,0,0);
       animation: floatBlob 10s var(--ease) infinite;
+      will-change: transform;
     }
-    .bg-accent::before{top: 1%; left: 6%;}
+    .bg-accent::before{ top: 2%; left: 6%; }
     .bg-accent::after{
-      bottom: -2%; right: 2%;
+      bottom: 0%;
+      right: 2%;
       background: radial-gradient(circle at 30% 30%, rgba(15,59,106,.58), rgba(15,59,106,.08) 70%, transparent 72%);
-      animation-duration: 12s; animation-direction: reverse;
+      animation-duration: 12s;
+      animation-direction: reverse;
     }
     @keyframes floatBlob{
       0%{ transform: translate3d(0,0,0) scale(1); }
@@ -77,514 +96,941 @@
       100%{ transform: translate3d(0,0,0) scale(1); }
     }
 
-    .page{
+    .wrap{
       min-height:100vh;
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       justify-content:center;
-      padding: 22px;
+      padding: clamp(16px, 4vw, 28px);
       position:relative;
-      z-index:2;
+      z-index:1;
     }
 
-    .window{
-      width:100%;
-      max-width: var(--maxw);
-      background: rgba(255,255,255,.38);
+    .panel{
+      width:min(1180px, 100%);
+      background: rgba(255,255,255,.44);
       border: 1px solid rgba(255,255,255,.35);
-      border-radius: 28px;
+      border-radius: var(--r-xl);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       overflow:hidden;
       transform: translateY(10px);
       opacity:0;
       animation: in .7s var(--ease) forwards;
     }
-    @keyframes in { to{ transform: translateY(0); opacity:1; } }
+    @keyframes in { to { transform: translateY(0); opacity:1; } }
 
     .topbar{
-      padding: 16px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
+      padding: 18px 18px 16px;
       background:
-        radial-gradient(900px 320px at 15% 0%, rgba(33,161,255,.25), transparent 55%),
+        radial-gradient(900px 320px at 15% 0%, rgba(33,161,255,.22), transparent 55%),
         linear-gradient(135deg, var(--navy) 0%, var(--navy2) 55%, var(--navy3) 100%);
-      border-bottom: 1px solid rgba(255,255,255,.10);
+      color:#fff;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
       flex-wrap:wrap;
     }
 
-    .brand{display:flex; align-items:center; gap:12px; color:white;}
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
     .mark{
-      width:44px; height:44px; border-radius:16px;
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.22);
-      box-shadow: 0 14px 40px rgba(0,0,0,.22);
-      position:relative; overflow:hidden;
-      flex: 0 0 auto;
+      width:44px;height:44px;border-radius:16px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:0 14px 40px rgba(0,0,0,.22);
+      position:relative;
+      overflow:hidden;
     }
     .mark::after{
-      content:""; position:absolute; inset:-40%;
+      content:"";
+      position:absolute;
+      inset:-40%;
       background: conic-gradient(from 180deg, rgba(33,161,255,0), rgba(33,161,255,.35), rgba(255,255,255,0));
-      animation: spinGlow 4.8s linear infinite; opacity:.8;
+      animation: spinGlow 5s linear infinite;
+      opacity:.8;
     }
     @keyframes spinGlow{ to{ transform: rotate(360deg); } }
 
-    .brand h1{font-family:'Montserrat',system-ui,sans-serif; font-size:18px; letter-spacing:-.02em;}
-    .who{color: rgba(255,255,255,.88); font-weight:700; font-size:12.5px; margin-top:6px;}
-
-    .actions{display:flex; gap: 10px; align-items:center; flex-wrap:wrap;}
-    .btn{
-      height: 44px;
-      border: none;
-      border-radius: 14px;
-      font-weight: 900;
-      letter-spacing: .04em;
-      cursor:pointer;
-      padding: 0 14px;
-      display:flex; align-items:center; justify-content:center; gap: 10px;
-      transition: transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
-      user-select:none; white-space:nowrap;
+    .brand h1{
+      font-family:'Montserrat',system-ui,sans-serif;
+      font-size: 18px;
+      letter-spacing:-.01em;
+      margin:0;
     }
-    .btn-ghost{
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.22);
-      color: rgba(255,255,255,.92);
-    }
-    .btn-ghost:hover{transform: translateY(-1px); box-shadow: 0 18px 44px rgba(0,0,0,.25)}
-    .btn-danger{
-      background: rgba(255,255,255,.92);
-      border: 1px solid rgba(255,59,59,.28);
-      color:#b42318;
-    }
-
-    .toggle{
-      display:flex;
-      background: rgba(255,255,255,.16);
-      border: 1px solid rgba(255,255,255,.22);
-      border-radius: 16px;
-      overflow:hidden;
-      height: 44px;
-    }
-    .toggle button{
-      height:44px;
-      border:0;
-      background:transparent;
-      color: rgba(255,255,255,.92);
-      font-weight:900;
-      padding:0 14px;
-      cursor:pointer;
-    }
-    .toggle button.active{
-      background: rgba(255,255,255,.90);
-      color: var(--navy2);
-    }
-
-    .tag{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.20);
-      background: rgba(255,255,255,.14);
-      font-weight: 900;
+    .brand p{
+      margin-top:4px;
+      font-weight:800;
+      color: rgba(255,255,255,.85);
       font-size: 12px;
-      color: rgba(255,255,255,.92);
+      letter-spacing:.08em;
+      text-transform:uppercase;
     }
-    .dot{width:8px;height:8px;border-radius:99px;background:var(--accent); box-shadow: 0 0 0 4px rgba(33,161,255,.15)}
 
-    .content{padding: 18px; display:grid; gap: 14px;}
-    .kpis{display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px;}
-    @media (max-width: 980px){ .kpis{grid-template-columns: repeat(2, 1fr);} }
+    .top-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
 
-    .kpi{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 22px;
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.10);
+      font-weight:900;
+      letter-spacing:.02em;
+      color:#fff;
+      user-select:none;
+    }
+    .chip small{ opacity:.88; font-weight:800; }
+
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius: 16px;
+      height:44px;
+      padding:0 14px;
+      font-weight:950;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn-light{
+      background: rgba(255,255,255,.92);
+      color: var(--navy2);
+      border:1px solid rgba(255,255,255,.25);
       box-shadow: var(--shadow-soft);
-      padding: 14px;
     }
-    .kpi b{display:block; font-family:'Montserrat',system-ui,sans-serif; font-size: 22px; letter-spacing:-.02em;}
-    .kpi span{color: var(--muted); font-weight: 700; font-size: 12.5px;}
+    .btn-primary{
+      color:#fff;
+      background:
+        radial-gradient(160px 120px at 20% 10%, rgba(99,211,255,.55), transparent 55%),
+        linear-gradient(135deg, var(--navy) 0%, var(--navy2) 55%, var(--navy3) 100%);
+      box-shadow: 0 18px 40px rgba(6,26,45,.26);
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
+
+    .content{
+      padding: 18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media(min-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
 
     .card{
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 22px;
+      border-radius: var(--r-lg);
       box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+
+    .section{
       padding: 16px;
+      border-bottom: 1px solid rgba(6,26,45,.08);
+    }
+    .section:last-child{ border-bottom:none; }
+
+    .h{
+      font-family:'Montserrat',system-ui,sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing:-.01em;
+      margin:0;
+    }
+    .sub{
+      margin-top:6px;
+      color: rgba(255,255,255,.86);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .muted{ color: var(--muted); font-weight:700; }
+
+    /* KPIs */
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    @media(min-width: 980px){
+      .kpis{ grid-template-columns: repeat(4, 1fr); }
+    }
+    .kpi{
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(6,26,45,.10);
+      border-radius: 18px;
+      padding: 12px 12px;
+    }
+    .kpi .n{
+      font-family:'Montserrat',system-ui,sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing:-.01em;
+    }
+    .kpi .l{
+      margin-top:4px;
+      color: rgba(91,102,114,.95);
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing:.04em;
+      text-transform:uppercase;
     }
 
-    .row{
-      display:flex; gap: 10px; align-items:center;
-      flex-wrap:wrap; justify-content:space-between;
+    /* Controls */
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
     }
-    .title{font-family:'Montserrat',system-ui,sans-serif; font-weight: 800; font-size: 16px;}
-    .muted{color: var(--muted); font-weight:700; font-size:12.5px; line-height:1.5}
-
+    .controls-left{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      flex:1;
+      min-width: 280px;
+    }
     .in, .sel{
-      height: 46px;
-      padding: 0 14px;
-      border: 1px solid rgba(6,26,45,.12);
+      height:44px;
+      padding:0 12px;
       border-radius: 14px;
-      font-size: 14px;
-      font-weight: 650;
-      background: rgba(255,255,255,.90);
-      transition: transform .18s var(--ease), border-color .18s var(--ease), box-shadow .18s var(--ease);
-    }
-    .in{width: min(360px, 100%);}
-    .sel{min-width: 200px; max-width: 100%;}
-    .in:focus, .sel:focus{
+      border:1px solid rgba(6,26,45,.12);
+      background: rgba(255,255,255,.86);
+      font-weight: 800;
+      color: var(--text);
       outline:none;
+      transition: box-shadow .18s var(--ease), border-color .18s var(--ease), transform .18s var(--ease);
+    }
+    .in{ width: min(420px, 100%); }
+    .sel{ width: 190px; }
+    .in:focus, .sel:focus{
       border-color: rgba(33,161,255,.85);
       box-shadow: 0 0 0 4px rgba(33,161,255,.18), 0 14px 40px rgba(6,26,45,.12);
       transform: translateY(-1px);
-      background: #fff;
+      background:#fff;
     }
 
-    /* Table view */
-    .tablewrap{
-      overflow:auto;
-      border-radius: 18px;
+    /* Table */
+    .table-wrap{
+      background: rgba(255,255,255,.92);
       border: 1px solid rgba(6,26,45,.10);
-      background: rgba(255,255,255,.86);
-      margin-top: 12px;
+      border-radius: 18px;
+      overflow:auto;
     }
     table{
       width:100%;
-      border-collapse: separate;
-      border-spacing:0;
-      min-width: 920px;
-      font-size: 13.5px;
+      border-collapse: collapse;
+      min-width: 860px;
     }
     th, td{
       padding: 12px 12px;
-      border-bottom: 1px solid rgba(6,26,45,.10);
-      font-weight: 700;
+      border-bottom: 1px solid rgba(6,26,45,.08);
       text-align:left;
-      white-space:nowrap;
+      font-weight: 800;
+      font-size: 13px;
     }
     th{
-      position: sticky; top: 0; z-index: 2;
-      background: rgba(245,248,255,.95);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      font-weight: 900;
+      position: sticky;
+      top:0;
+      background: #f3f8ff;
+      z-index: 1;
+      font-weight: 950;
     }
-    tr:hover td{background: rgba(33,161,255,.06);}
+    tr:hover td{ background: rgba(33,161,255,.05); }
+    td.actions{ white-space:nowrap; }
 
     .mini-btn{
-      height: 34px;
-      padding: 0 10px;
+      height:34px;
+      padding:0 12px;
       border-radius: 12px;
-      border: 1px solid rgba(6,26,45,.12);
-      background: rgba(255,255,255,.72);
-      font-weight: 900;
+      border:1px solid rgba(6,26,45,.12);
+      background:#fff;
+      font-weight: 950;
       cursor:pointer;
-      margin-right: 6px;
+      transition: transform .15s var(--ease);
     }
-    .mini-danger{border-color: rgba(255,59,59,.25); color:#b42318;}
+    .mini-btn:hover{ transform: translateY(-1px); }
 
-    /* Cards view */
-    .cards{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 12px;
-    }
-    @media (max-width: 1100px){ .cards{grid-template-columns: repeat(2, 1fr);} }
-    @media (max-width: 760px){ .cards{grid-template-columns: 1fr;} }
-
-    .lead-card{
-      background: rgba(255,255,255,.88);
+    /* Empty */
+    .empty{
+      background: rgba(6,26,45,.04);
       border: 1px solid rgba(6,26,45,.10);
       border-radius: 18px;
       padding: 14px;
-      box-shadow: 0 10px 22px rgba(6,26,45,.08);
+      font-weight: 800;
+      color: rgba(91,102,114,.95);
     }
-    .lead-top{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
-      margin-bottom: 10px;
-    }
-    .lead-name{
-      font-family:'Montserrat',system-ui,sans-serif;
-      font-weight:800;
-      font-size: 15px;
-      line-height:1.25;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 12px;
-      border: 1px solid rgba(6,26,45,.10);
-      background: rgba(6,26,45,.04);
-      color: rgba(6,26,45,.86);
-      white-space:nowrap;
-    }
-    .pill.new{ background: rgba(33,161,255,.10); border-color: rgba(33,161,255,.25); color: rgba(10,42,74,.95); }
-    .pill.contacted{ background: rgba(16,185,129,.10); border-color: rgba(16,185,129,.25); color: rgba(6,95,70,.95); }
-    .pill.closed{ background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.25); color: rgba(124,45,18,.95); }
 
-    .lead-meta{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      color: rgba(11,27,42,.85);
-      font-weight: 700;
-      font-size: 13px;
-    }
-    @media (max-width: 420px){ .lead-meta{grid-template-columns: 1fr;} }
-    .lead-meta div span{display:block; color: var(--muted); font-weight:800; font-size: 11px; letter-spacing:.04em; text-transform:uppercase;}
-    .lead-actions{display:flex; gap: 8px; flex-wrap:wrap; margin-top: 12px;}
-
+    /* Pagination */
     .pager{
-      display:flex; align-items:center; justify-content:space-between;
-      gap: 10px; margin-top: 12px; flex-wrap:wrap;
-    }
-    .pager .left, .pager .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
-    .pager .pbtn{
-      height: 40px; border-radius: 12px; padding: 0 12px;
-      border: 1px solid rgba(6,26,45,.12);
-      background: rgba(255,255,255,.72);
-      font-weight: 900; cursor:pointer;
-    }
-    .pager .pbtn:disabled{opacity:.55; cursor:not-allowed}
-    .pager .info{color:var(--muted); font-weight:800; font-size:12.5px}
-
-    .toast{
-      position:fixed; left:50%; bottom:18px;
-      transform: translateX(-50%);
-      background: rgba(11,27,42,.92);
-      color:white;
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: 900;
-      display:none;
-      z-index: 99;
-    }
-
-    /* Modal */
-    .modal-backdrop{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.35);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index: 120;
-      padding: 18px;
-    }
-    .modal{
-      width: min(760px, 96vw);
-      background: rgba(255,255,255,.80);
-      border: 1px solid rgba(255,255,255,.40);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      transform: translateY(10px);
-      opacity:0;
-      transition: all .18s var(--ease);
-    }
-    .modal-backdrop.show{display:flex;}
-    .modal-backdrop.show .modal{transform: translateY(0); opacity:1;}
-    .modal-header{
-      padding: 14px 16px;
-      background:
-        radial-gradient(900px 320px at 15% 0%, rgba(33,161,255,.18), transparent 55%),
-        linear-gradient(135deg, rgba(6,26,45,.92) 0%, rgba(10,42,74,.92) 55%, rgba(15,59,106,.92) 100%);
-      color:white;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 10px;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
     }
-    .modal-header b{font-family:'Montserrat',system-ui,sans-serif;}
-    .modal-body{padding: 14px 16px;}
+    .pager .info{ font-weight:800; color: rgba(91,102,114,.95); }
+
+    /* Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      background: rgba(11,27,42,.38);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index:50;
+    }
+    .modal.show{ display:flex; }
+    .modal-card{
+      width: min(920px, 100%);
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 22px;
+      box-shadow: 0 30px 90px rgba(15,23,42,.28);
+      overflow:hidden;
+    }
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 14px 14px;
+      border-bottom: 1px solid rgba(6,26,45,.10);
+    }
+    .modal-head h3{
+      margin:0;
+      font-family:'Montserrat',system-ui,sans-serif;
+      font-weight: 900;
+      letter-spacing:-.01em;
+      font-size: 16px;
+    }
+    .modal-body{
+      padding: 14px;
+      max-height: 70vh;
+      overflow:auto;
+    }
     .form-grid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: 1fr;
+      gap: 10px;
     }
-    @media (max-width: 760px){ .form-grid{grid-template-columns: 1fr;} }
-
+    @media(min-width: 860px){
+      .form-grid{ grid-template-columns: 1fr 1fr; }
+    }
+    .fg{
+      background: rgba(6,26,45,.04);
+      border: 1px solid rgba(6,26,45,.10);
+      border-radius: 16px;
+      padding: 10px;
+    }
     .fg label{
       display:block;
-      font-size:12px;
-      font-weight:900;
-      color: rgba(11,27,42,.78);
+      font-size: 11px;
+      font-weight: 950;
       letter-spacing:.06em;
       text-transform:uppercase;
-      margin-bottom:6px;
+      color: rgba(11,27,42,.78);
+      margin-bottom: 6px;
     }
-    .fg input, .fg textarea, .fg select{
-      width:100%;
-      border:1px solid rgba(6,26,45,.12);
-      border-radius: 14px;
-      padding: 10px 12px;
-      font-weight: 700;
+    .fg .v{
       background: rgba(255,255,255,.92);
-      font-size: 14px;
+      border: 1px solid rgba(6,26,45,.10);
+      border-radius: 12px;
+      padding: 10px 10px;
+      font-weight: 850;
     }
-    .fg textarea{min-height: 96px; resize: vertical;}
-    .modal-actions{
-      padding: 12px 16px 16px;
-      display:flex;
-      gap: 10px;
-      justify-content:flex-end;
-      flex-wrap:wrap;
-    }
-    .btn-primary{
-      color:white;
-      background:
-        radial-gradient(160px 120px at 20% 10%, rgba(99,211,255,.55), transparent 55%),
-        linear-gradient(135deg, var(--navy) 0%, var(--navy2) 55%, var(--navy3) 100%);
-      box-shadow: 0 18px 40px rgba(6,26,45,.22);
-    }
-    .btn-light{
-      background: rgba(255,255,255,.72);
+
+    /* Toast */
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,.94);
       border: 1px solid rgba(6,26,45,.12);
-      color: var(--navy2);
-      box-shadow: var(--shadow-soft);
-    }
-    .btn-small{height: 42px; padding: 0 12px; border-radius: 14px;}
-    .spinner{
-      width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,.85);
-      border-top-color: transparent;
-      border-radius: 999px;
-      animation: spin .7s linear infinite;
-    }
-    @keyframes spin{ to{ transform: rotate(360deg); } }
-
-    .empty{
-      padding: 14px;
-      border: 1px dashed rgba(6,26,45,.18);
-      border-radius: 18px;
-      background: rgba(255,255,255,.55);
-      color: rgba(11,27,42,.86);
-      font-weight: 800;
-      margin-top: 12px;
+      border-radius: 16px;
+      padding: 12px 14px;
+      box-shadow: 0 14px 40px rgba(15,23,42,.18);
+      font-weight: 950;
+      display:none;
+      z-index:60;
+      max-width: min(720px, calc(100% - 24px));
     }
 
-    .hidden{display:none !important;}
+    .hidden{ display:none; }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+      .bg-accent{ display:none; }
+    }
   </style>
 </head>
 
 <body>
   <div class="bg-accent"></div>
 
-  <div class="page">
-    <div class="window">
+  <div class="wrap">
+    <div class="panel">
       <div class="topbar">
         <div class="brand">
           <div class="mark" aria-hidden="true"></div>
           <div>
-            <h1>NEXCARD • Dashboard</h1>
-            <p class="who" id="who">Cargando sesión…</p>
+            <h1>NEXCARD</h1>
+            <div class="sub">Dashboard</div>
           </div>
         </div>
 
-        <div class="actions">
-          <span class="tag"><span class="dot"></span> Empresa: <span id="empresaId">—</span></span>
-
-          <div class="toggle" role="tablist" aria-label="Vista">
-            <button id="viewTableBtn" class="active" type="button" role="tab" aria-selected="true">Tabla</button>
-            <button id="viewCardsBtn" type="button" role="tab" aria-selected="false">Tarjetas</button>
-          </div>
-
-          <button class="btn btn-ghost" id="refreshBtn" type="button">Refrescar</button>
-          <button class="btn btn-danger" id="logoutBtn" type="button">Cerrar sesión</button>
+        <div class="top-right">
+          <div class="chip" id="whoChip">Cargando…</div>
+          <div class="chip" id="empresaChip">Empresa: <small id="empresaId">—</small></div>
+          <button class="btn btn-light" id="refreshBtn" type="button">Actualizar</button>
+          <button class="btn btn-primary" id="logoutBtn" type="button">Cerrar sesión</button>
         </div>
       </div>
 
       <div class="content">
-        <div class="kpis">
-          <div class="kpi"><b id="kpiTotal">—</b><span>Total</span></div>
-          <div class="kpi"><b id="kpiHoy">—</b><span>Hoy</span></div>
-          <div class="kpi"><b id="kpiSemana">—</b><span>7 días</span></div>
-          <div class="kpi"><b id="kpiMes">—</b><span>30 días</span></div>
-        </div>
+        <div class="grid">
 
-        <div class="card">
-          <div class="row">
-            <div>
-              <div class="title">Contactos</div>
-              <div class="muted">Vista moderna • estados • editar/borrar • exportar</div>
+          <div class="card">
+            <div class="section">
+              <div class="kpis">
+                <div class="kpi"><div class="n" id="kpiTotal">—</div><div class="l">Registros</div></div>
+                <div class="kpi"><div class="n" id="kpiHoy">—</div><div class="l">Hoy</div></div>
+                <div class="kpi"><div class="n" id="kpiSemana">—</div><div class="l">7 días</div></div>
+                <div class="kpi"><div class="n" id="kpiMes">—</div><div class="l">30 días</div></div>
+              </div>
             </div>
 
-            <input id="contactsSearch" class="in" placeholder="Buscar… (nombre, correo, teléfono, etc.)">
-          </div>
+            <div class="section">
+              <div class="controls">
+                <div class="controls-left">
+                  <input class="in" id="search" type="text" placeholder="Buscar por nombre, email, teléfono, etc.">
+                  <select class="sel" id="filterVendedor">
+                    <option value="">Vendedor: Todos</option>
+                  </select>
+                  <select class="sel" id="filterInteres">
+                    <option value="">Interés: Todos</option>
+                  </select>
+                </div>
 
-          <div style="height:12px"></div>
-
-          <div class="row">
-            <select id="filterEstado" class="sel">
-              <option value="">Estado: Todos</option>
-            </select>
-
-            <select id="filterVendedor" class="sel">
-              <option value="">Vendedor: Todos</option>
-            </select>
-
-            <select id="filterInteres" class="sel">
-              <option value="">Interés/Servicio: Todos</option>
-            </select>
-
-            <button class="btn btn-ghost" id="clearFiltersBtn" type="button" style="height:46px;">Limpiar</button>
-            <button class="btn btn-ghost" id="exportCsvBtn" type="button" style="height:46px;">Exportar CSV</button>
-          </div>
-
-          <!-- TABLA -->
-          <div id="tableView">
-            <div class="tablewrap">
-              <table>
-                <thead><tr id="contactsHead"></tr></thead>
-                <tbody id="contactsBody"></tbody>
-              </table>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                  <button class="btn btn-light" id="clearBtn" type="button">Limpiar</button>
+                  <button class="btn btn-light" id="exportBtn" type="button">Exportar CSV</button>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <!-- TARJETAS -->
-          <div id="cardsView" class="hidden">
-            <div id="cardsContainer" class="cards"></div>
-          </div>
+            <div class="section">
+              <div class="table-wrap" id="tableWrap">
+                <table>
+                  <thead>
+                    <tr id="theadRow"></tr>
+                  </thead>
+                  <tbody id="tbody"></tbody>
+                </table>
+              </div>
 
-          <div id="emptyBox" class="empty hidden"></div>
+              <div class="empty hidden" id="emptyBox">No hay registros.</div>
 
-          <div class="pager">
-            <div class="left">
-              <button class="pbtn" id="prevPageBtn" type="button">← Anterior</button>
-              <button class="pbtn" id="nextPageBtn" type="button">Siguiente →</button>
-              <span class="info" id="pageInfo">—</span>
+              <div class="pager">
+                <div class="info" id="rowsInfo">—</div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                  <button class="btn btn-light" id="prevBtn" type="button">Anterior</button>
+                  <button class="btn btn-light" id="nextBtn" type="button">Siguiente</button>
+                </div>
+                <div class="info" id="pageInfo">—</div>
+              </div>
             </div>
-            <div class="right">
-              <span class="info" id="rowsInfo">—</span>
-            </div>
+
           </div>
+
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL -->
-  <div class="modal-backdrop" id="modalBackdrop">
-    <div class="modal" role="dialog" aria-modal="true">
-      <div class="modal-header">
-        <b id="modalTitle">—</b>
-        <button class="btn btn-ghost btn-small" id="modalCloseBtn" type="button">Cerrar</button>
+  <!-- Modal detalle -->
+  <div class="modal" id="modal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="modalTitle">Detalle</h3>
+        <button class="btn btn-light" id="modalClose" type="button">Cerrar</button>
       </div>
       <div class="modal-body" id="modalBody"></div>
-      <div class="modal-actions" id="modalActions"></div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <script src="dashboard.js"></script>
+  <script>
+    // ====== CONFIG ======
+    const API_BASE = "https://script.google.com/macros/s/AKfycbx7ghGSC47jyKY5ArI2s1JpO3UILEHVzmfaHxYxG3sLYfN3QDyFYWnXFStRLHvdJGtXRQ/exec";
+    const TOKEN_KEY = "nexcard_token";
+    const EMPRESA_KEY = "nexcard_empresa_id";
+    const PAGE_SIZE = 25;
+
+    // ====== STATE ======
+    let token = localStorage.getItem(TOKEN_KEY) || "";
+    let empresa_id = (localStorage.getItem(EMPRESA_KEY) || "").trim().toLowerCase();
+
+    let headers = [];
+    let rows = [];
+    let filtered = [];
+    let page = 1;
+    let totalPages = 1;
+
+    // Column detection
+    let idCol = null;
+    let dateCol = null;
+    let vendedorCol = null;
+    let interesCol = null;
+
+    // ====== DOM ======
+    const whoChip = document.getElementById("whoChip");
+    const empresaIdEl = document.getElementById("empresaId");
+
+    const refreshBtn = document.getElementById("refreshBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const searchEl = document.getElementById("search");
+    const filterVendedorEl = document.getElementById("filterVendedor");
+    const filterInteresEl = document.getElementById("filterInteres");
+    const clearBtn = document.getElementById("clearBtn");
+    const exportBtn = document.getElementById("exportBtn");
+
+    const theadRow = document.getElementById("theadRow");
+    const tbody = document.getElementById("tbody");
+    const emptyBox = document.getElementById("emptyBox");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const pageInfo = document.getElementById("pageInfo");
+    const rowsInfo = document.getElementById("rowsInfo");
+
+    const kpiTotal = document.getElementById("kpiTotal");
+    const kpiHoy = document.getElementById("kpiHoy");
+    const kpiSemana = document.getElementById("kpiSemana");
+    const kpiMes = document.getElementById("kpiMes");
+
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const modalClose = document.getElementById("modalClose");
+
+    const toastEl = document.getElementById("toast");
+
+    // ====== HELPERS ======
+    function toast(msg){
+      toastEl.textContent = msg;
+      toastEl.style.display = "block";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> toastEl.style.display="none", 1800);
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function jsonp(url){
+      return new Promise((resolve, reject) => {
+        const cb = "cb_" + Math.random().toString(36).slice(2);
+        const s = document.createElement("script");
+        window[cb] = (data) => {
+          try { delete window[cb]; } catch(_){}
+          s.remove();
+          resolve(data);
+        };
+        s.onerror = () => {
+          try { delete window[cb]; } catch(_){}
+          s.remove();
+          reject(new Error("No se pudo conectar con el servidor."));
+        };
+        s.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cb;
+        document.body.appendChild(s);
+      });
+    }
+
+    function parseDate(v){
+      if (v == null) return null;
+      if (v instanceof Date && !isNaN(v.getTime())) return v;
+      const s = String(v).trim();
+      if(!s) return null;
+      const d = new Date(s);
+      if(!isNaN(d.getTime())) return d;
+      return null;
+    }
+
+    function findHeader(candidates){
+      const low = headers.map(h => String(h||"").trim().toLowerCase());
+      for(const c of candidates){
+        const idx = low.indexOf(String(c).trim().toLowerCase());
+        if(idx >= 0) return headers[idx];
+      }
+      return null;
+    }
+
+    function fillSelect(selectEl, values, placeholder){
+      const cur = selectEl.value || "";
+      selectEl.innerHTML = "";
+      const o0 = document.createElement("option");
+      o0.value = "";
+      o0.textContent = placeholder;
+      selectEl.appendChild(o0);
+      values.forEach(v=>{
+        const o = document.createElement("option");
+        o.value = v;
+        o.textContent = v;
+        selectEl.appendChild(o);
+      });
+      if ([...selectEl.options].some(o=>o.value===cur)) selectEl.value = cur;
+    }
+
+    function openModal(title, html){
+      modalTitle.textContent = title;
+      modalBody.innerHTML = html;
+      modal.classList.add("show");
+    }
+    function closeModal(){
+      modal.classList.remove("show");
+      modalBody.innerHTML = "";
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+
+    async function apiMe(){
+      const qs = new URLSearchParams({ action:"me", token });
+      const data = await jsonp(`${API_BASE}?${qs.toString()}`);
+      if(!data || data.ok !== true) throw new Error(data?.message || "No se pudo validar sesión.");
+      return data;
+    }
+
+    async function apiListLeads(){
+      const qs = new URLSearchParams({ action:"listLeads", token, empresa_id });
+      const data = await jsonp(`${API_BASE}?${qs.toString()}`);
+      if(!data || data.ok !== true) throw new Error(data?.message || "No se pudo cargar la base de datos.");
+      return data;
+    }
+
+    function ensureSessionOrRedirect(){
+      if(!token){
+        location.href = "login.html";
+        return false;
+      }
+      return true;
+    }
+
+    // ====== RENDER ======
+    function computeKPIs(){
+      const now = new Date();
+      const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const msDay = 24*60*60*1000;
+
+      let total = rows.length;
+      let hoy = 0, semana = 0, mes = 0;
+
+      for(const r of rows){
+        const d = dateCol ? parseDate(r[dateCol]) : null;
+        if(!d) continue;
+        const diff = now.getTime() - d.getTime();
+        if(d >= startToday) hoy++;
+        if(diff <= 7*msDay) semana++;
+        if(diff <= 30*msDay) mes++;
+      }
+
+      kpiTotal.textContent = String(total);
+      kpiHoy.textContent = String(hoy);
+      kpiSemana.textContent = String(semana);
+      kpiMes.textContent = String(mes);
+    }
+
+    function buildHeader(){
+      theadRow.innerHTML = "";
+      // mostramos todo excepto ID si existe
+      const visible = headers.filter(h => h !== idCol);
+      visible.forEach(h=>{
+        const th = document.createElement("th");
+        th.textContent = h;
+        theadRow.appendChild(th);
+      });
+      const thA = document.createElement("th");
+      thA.textContent = "Acciones";
+      theadRow.appendChild(thA);
+    }
+
+    function buildFilters(){
+      const vSet = new Set();
+      const iSet = new Set();
+
+      if(vendedorCol){
+        rows.forEach(r=>{
+          const v = String(r[vendedorCol]||"").trim();
+          if(v) vSet.add(v);
+        });
+      }
+      if(interesCol){
+        rows.forEach(r=>{
+          const v = String(r[interesCol]||"").trim();
+          if(v) iSet.add(v);
+        });
+      }
+
+      fillSelect(filterVendedorEl, [...vSet].sort((a,b)=>a.localeCompare(b)), "Vendedor: Todos");
+      fillSelect(filterInteresEl, [...iSet].sort((a,b)=>a.localeCompare(b)), "Interés: Todos");
+    }
+
+    function applyFilters(){
+      let out = rows.slice();
+
+      // ordenar por fecha desc si existe
+      if(dateCol){
+        out.sort((a,b)=>{
+          const da = parseDate(a[dateCol])?.getTime() || 0;
+          const db = parseDate(b[dateCol])?.getTime() || 0;
+          return db - da;
+        });
+      }
+
+      const q = (searchEl.value || "").trim().toLowerCase();
+      const fv = (filterVendedorEl.value || "").trim();
+      const fi = (filterInteresEl.value || "").trim();
+
+      if(fv && vendedorCol) out = out.filter(r => String(r[vendedorCol]||"").trim() === fv);
+      if(fi && interesCol) out = out.filter(r => String(r[interesCol]||"").trim() === fi);
+
+      if(q){
+        const visible = headers.filter(h => h !== idCol);
+        out = out.filter(r => visible.some(h => String(r[h]||"").toLowerCase().includes(q)));
+      }
+
+      filtered = out;
+      page = 1;
+      renderPage();
+    }
+
+    function renderPage(){
+      totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+      page = Math.min(Math.max(1, page), totalPages);
+
+      const start = (page - 1) * PAGE_SIZE;
+      const pageRows = filtered.slice(start, start + PAGE_SIZE);
+
+      tbody.innerHTML = "";
+      emptyBox.classList.toggle("hidden", filtered.length > 0);
+
+      const visible = headers.filter(h => h !== idCol);
+
+      pageRows.forEach(r=>{
+        const tr = document.createElement("tr");
+        visible.forEach(h=>{
+          const td = document.createElement("td");
+          td.innerHTML = escapeHtml(r[h]);
+          tr.appendChild(td);
+        });
+
+        const tdA = document.createElement("td");
+        tdA.className = "actions";
+        const rid = idCol ? String(r[idCol]||"").trim() : "";
+        tdA.innerHTML = `<button class="mini-btn" data-act="view" data-id="${escapeHtml(rid)}">Ver</button>`;
+        tr.appendChild(tdA);
+
+        tbody.appendChild(tr);
+      });
+
+      prevBtn.disabled = page <= 1;
+      nextBtn.disabled = page >= totalPages;
+
+      rowsInfo.textContent = `${filtered.length} resultado(s)`;
+      pageInfo.textContent = `Página ${page} / ${totalPages}`;
+    }
+
+    function exportCSV(){
+      if(!filtered.length){
+        toast("No hay datos para exportar.");
+        return;
+      }
+      const visible = headers.filter(h => h !== idCol);
+      const esc = (v) => {
+        const s = String(v ?? "");
+        if (/[,"\n]/.test(s)) return `"${s.replaceAll('"','""')}"`;
+        return s;
+      };
+
+      const lines = [];
+      lines.push(visible.map(esc).join(","));
+      filtered.forEach(r=>{
+        lines.push(visible.map(h => esc(r[h])).join(","));
+      });
+
+      const blob = new Blob([lines.join("\n")], { type:"text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `nexcard_${empresa_id || "empresa"}_leads.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast("CSV descargado.");
+    }
+
+    // ====== EVENTS ======
+    refreshBtn.addEventListener("click", async ()=>{
+      refreshBtn.disabled = true;
+      try{
+        await loadAll(true);
+      }finally{
+        refreshBtn.disabled = false;
+      }
+    });
+
+    logoutBtn.addEventListener("click", ()=>{
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(EMPRESA_KEY);
+      location.href = "login.html";
+    });
+
+    searchEl.addEventListener("input", applyFilters);
+    filterVendedorEl.addEventListener("change", applyFilters);
+    filterInteresEl.addEventListener("change", applyFilters);
+
+    clearBtn.addEventListener("click", ()=>{
+      searchEl.value = "";
+      filterVendedorEl.value = "";
+      filterInteresEl.value = "";
+      applyFilters();
+    });
+
+    exportBtn.addEventListener("click", exportCSV);
+
+    prevBtn.addEventListener("click", ()=>{ if(page > 1){ page--; renderPage(); } });
+    nextBtn.addEventListener("click", ()=>{ if(page < totalPages){ page++; renderPage(); } });
+
+    document.addEventListener("click", (e)=>{
+      const btn = e.target.closest("button");
+      if(!btn) return;
+
+      const act = btn.getAttribute("data-act");
+      if(act !== "view") return;
+
+      const rid = btn.getAttribute("data-id") || "";
+      const row = idCol ? rows.find(r => String(r[idCol]||"").trim() === String(rid).trim()) : null;
+      if(!row){ toast("No se encontró el registro."); return; }
+
+      const html = headers.map(h => `
+        <div class="fg">
+          <label>${escapeHtml(h)}</label>
+          <div class="v">${escapeHtml(row[h])}</div>
+        </div>
+      `).join("");
+
+      openModal("Detalle del contacto", `<div class="form-grid">${html}</div>`);
+    });
+
+    // ====== LOAD ======
+    async function loadAll(showToast){
+      // 1) Validar sesión y obtener empresa_id si falta
+      const me = await apiMe();
+      whoChip.textContent = `${me.email} • ${String(me.role||"").toUpperCase()}`;
+
+      if(!empresa_id){
+        const emp = String(me.empresa_id || "").trim().toLowerCase();
+        if(emp){
+          empresa_id = emp;
+          localStorage.setItem(EMPRESA_KEY, empresa_id);
+        }
+      }
+
+      if(!empresa_id){
+        empresaIdEl.textContent = "—";
+        emptyBox.textContent = "Este usuario no tiene empresa asignada (empresa_id) en ADMIN.";
+        emptyBox.classList.remove("hidden");
+        throw new Error("Panel no configurado (empresa_id faltante).");
+      }
+
+      empresaIdEl.textContent = empresa_id;
+
+      // 2) Cargar leads
+      const data = await apiListLeads();
+      headers = Array.isArray(data.headers) ? data.headers : [];
+      rows = Array.isArray(data.rows) ? data.rows : [];
+
+      // 3) Detect columns
+      idCol = findHeader(["id","ID","Id"]);
+      dateCol = findHeader(["Fecha","fecha","timestamp","Timestamp"]);
+      vendedorCol = findHeader(["Vendedor","vendedor"]);
+      interesCol = findHeader(["Interés","Interes","interes","intereses","Servicio","servicio"]);
+
+      buildHeader();
+      computeKPIs();
+      buildFilters();
+      applyFilters();
+
+      if(showToast) toast("Actualizado.");
+    }
+
+    async function init(){
+      if(!ensureSessionOrRedirect()) return;
+
+      try{
+        await loadAll(false);
+      }catch(err){
+        console.error(err);
+        const msg = String(err?.message || err);
+
+        // Si token expiró / inválido → vuelve a login
+        if(msg.toLowerCase().includes("token")){
+          localStorage.removeItem(TOKEN_KEY);
+          localStorage.removeItem(EMPRESA_KEY);
+          location.href = "login.html";
+          return;
+        }
+
+        toast(msg);
+      }
+    }
+
+    init();
+  </script>
 </body>
 </html>
