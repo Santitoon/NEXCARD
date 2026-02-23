@@ -12,7 +12,7 @@
   <style>
     :root{
       --bg0:#f7fbff; --bg1:#eef4ff;
-      --card:rgba(255,255,255,.75);
+      --card:rgba(255,255,255,.72);
       --border:rgba(6,26,45,.12);
       --text:#0b1b2a; --muted:#5b6672;
       --navy:#061A2D; --navy2:#0A2A4A; --navy3:#0F3B6A;
@@ -56,12 +56,12 @@
 
     .panel{
       width:min(520px, 92vw);
-      background:rgba(255,255,255,.42);
+      background: rgba(255,255,255,.44);
       border:1px solid rgba(255,255,255,.35);
       border-radius:28px;
       box-shadow:var(--shadow);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       overflow:hidden;
       transform: translateY(10px);
       opacity:0;
@@ -69,15 +69,6 @@
       z-index:2;
     }
     @keyframes in { to{ transform: translateY(0); opacity:1; } }
-
-    .card{
-      margin:18px;
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:22px;
-      box-shadow:var(--shadow-soft);
-      padding:18px;
-    }
 
     .brand{
       display:flex; align-items:center; gap:12px;
@@ -103,23 +94,33 @@
     }
     @keyframes spin{ to{ transform: rotate(360deg); } }
 
-    .brand h1{font-family:'Montserrat',system-ui,sans-serif;font-size:20px;letter-spacing:-.02em}
-    .brand p{margin-top:4px;color:rgba(255,255,255,.85);font-weight:700;font-size:13px}
+    .brand h1{font-family:'Montserrat',system-ui,sans-serif;font-size:20px;letter-spacing:-.02em;margin:0}
+    .brand p{margin-top:4px;color:rgba(255,255,255,.85);font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+
+    .card{
+      margin:18px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--shadow-soft);
+      padding:18px;
+    }
 
     h2{
       font-family:'Montserrat',system-ui,sans-serif;
-      font-size:22px; letter-spacing:-.02em;
+      font-size:22px;
+      letter-spacing:-.02em;
       margin-bottom:10px;
     }
 
     label{
       display:block;
       font-size:12px;
-      font-weight:900;
-      color:rgba(11,27,42,.82);
-      margin:10px 0 6px;
+      font-weight:950;
       letter-spacing:.06em;
       text-transform:uppercase;
+      color:rgba(11,27,42,.82);
+      margin:10px 0 6px;
     }
     .in{
       width:100%;
@@ -145,7 +146,7 @@
       height:50px;
       border:none;
       border-radius:16px;
-      font-weight:900;
+      font-weight:950;
       letter-spacing:.06em;
       text-transform:uppercase;
       cursor:pointer;
@@ -171,6 +172,7 @@
       color:var(--navy2);
       box-shadow:var(--shadow-soft);
     }
+    .btn:disabled{ opacity:.65; cursor:not-allowed; transform:none; }
 
     .spinner{
       width:16px;height:16px;
@@ -189,8 +191,16 @@
       padding: 10px 12px;
       font-size: 14px;
       color: #b42318;
-      font-weight: 700;
+      font-weight: 800;
       margin-top: 12px;
+    }
+
+    .note{
+      margin-top:10px;
+      font-size:12px;
+      color:rgba(91,102,114,.95);
+      font-weight:800;
+      line-height:1.45;
     }
   </style>
 </head>
@@ -198,7 +208,7 @@
 <body>
   <div class="bg-accent"></div>
 
-  <div class="panel" role="dialog" aria-label="Acceso empresas NEXCARD">
+  <div class="panel" role="dialog" aria-label="Acceso al panel NEXCARD">
     <div class="brand">
       <div class="mark" aria-hidden="true"></div>
       <div>
@@ -210,7 +220,7 @@
     <div class="card">
       <h2>Iniciar sesión</h2>
 
-      <form id="loginForm">
+      <form id="loginForm" autocomplete="on">
         <label for="email">Email</label>
         <input class="in" id="email" type="email" autocomplete="username" required>
 
@@ -223,15 +233,20 @@
         </div>
 
         <div class="err" id="errBox"></div>
+        <div class="note">
+          Si es tu primera vez en este navegador, el dashboard te pedirá el <b>empresa_id</b> una sola vez.
+        </div>
       </form>
     </div>
   </div>
 
   <script>
+    // ====== CONFIG ======
     const API_BASE = "https://script.google.com/macros/s/AKfycbx7ghGSC47jyKY5ArI2s1JpO3UILEHVzmfaHxYxG3sLYfN3QDyFYWnXFStRLHvdJGtXRQ/exec";
     const TOKEN_KEY = "nexcard_token";
     const EMPRESA_KEY = "nexcard_empresa_id";
 
+    // ====== JSONP ======
     function jsonp(url){
       return new Promise((resolve, reject)=>{
         const cb = "cb_" + Math.random().toString(36).slice(2);
@@ -254,18 +269,19 @@
       box.style.display = "none";
     }
 
-    async function fetchMe(token){
-      const qs = new URLSearchParams({ action:"me", token });
-      const data = await jsonp(`${API_BASE}?${qs.toString()}`);
-      if(!data || data.ok !== true) throw new Error((data && data.message) ? data.message : "No se pudo validar sesión");
-      return data;
-    }
-
     document.getElementById("btnClear").addEventListener("click", ()=>{
       document.getElementById("email").value = "";
       document.getElementById("password").value = "";
       clearErr();
     });
+
+    // Si ya hay token, mandamos al dashboard
+    (function autoRedirectIfToken(){
+      const t = localStorage.getItem(TOKEN_KEY);
+      if(t && t.trim()){
+        location.href = "dashboard.html";
+      }
+    })();
 
     document.getElementById("loginForm").addEventListener("submit", async (e)=>{
       e.preventDefault();
@@ -280,34 +296,24 @@
       btn.innerHTML = '<div class="spinner"></div> Entrando…';
 
       try{
-        // 1) Login
         const qs = new URLSearchParams({ action:"login", email, password });
         const data = await jsonp(`${API_BASE}?${qs.toString()}`);
 
-        if(!data || data.ok !== true) {
+        if(!data || data.ok !== true){
           throw new Error((data && data.message) ? data.message : "Login falló");
         }
 
-        // 2) Guardar token
+        // Guardar token
         localStorage.setItem(TOKEN_KEY, data.token);
 
-        // 3) Guardar empresa_id (preferimos el que venga del login)
-        let emp = (data.empresa_id || "").toString().trim().toLowerCase();
-
-        // 4) Si login no trae empresa_id, lo pedimos por me()
-        if(!emp){
-          const me = await fetchMe(data.token);
-          emp = (me.empresa_id || "").toString().trim().toLowerCase();
-        }
-
-        if(emp){
-          localStorage.setItem(EMPRESA_KEY, emp);
-        }else{
-          // No bloqueamos el acceso: el dashboard puede mostrar un error claro si falta empresa asignada
+        // NO tocamos empresa_id aquí porque el backend no lo devuelve.
+        // Si ya existe guardado de antes, se conserva.
+        const existingEmp = (localStorage.getItem(EMPRESA_KEY) || "").trim();
+        if(!existingEmp){
+          // lo dejamos vacío para que el dashboard lo pida una sola vez
           localStorage.removeItem(EMPRESA_KEY);
         }
 
-        // 5) Ir al dashboard SIN parámetros
         location.href = "dashboard.html";
 
       }catch(err){
