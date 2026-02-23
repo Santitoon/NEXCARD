@@ -109,9 +109,8 @@
     h2{
       font-family:'Montserrat',system-ui,sans-serif;
       font-size:22px; letter-spacing:-.02em;
-      margin-bottom:6px;
+      margin-bottom:10px;
     }
-    .hint{color:var(--muted);font-weight:700;font-size:13px;margin-bottom:14px}
 
     label{
       display:block;
@@ -204,13 +203,12 @@
       <div class="mark" aria-hidden="true"></div>
       <div>
         <h1>NEXCARD</h1>
-        <p>NFC + QR • Leads a Sheets</p>
+        <p>Acceso al panel</p>
       </div>
     </div>
 
     <div class="card">
-      <h2>Acceso empresas</h2>
-      <div class="hint">Ventana flotante • diseño moderno • seguro con token</div>
+      <h2>Iniciar sesión</h2>
 
       <form id="loginForm">
         <label for="email">Email</label>
@@ -232,7 +230,7 @@
   <script>
     const API_BASE = "https://script.google.com/macros/s/AKfycbx7ghGSC47jyKY5ArI2s1JpO3UILEHVzmfaHxYxG3sLYfN3QDyFYWnXFStRLHvdJGtXRQ/exec";
     const TOKEN_KEY = "nexcard_token";
-    const EMPRESA_KEY = "nexcard_empresa_id"; // se usará SOLO si dashboard viene con ?empresa_id=...
+    const EMPRESA_KEY = "nexcard_empresa_id";
 
     function jsonp(url){
       return new Promise((resolve, reject)=>{
@@ -256,6 +254,13 @@
       box.style.display = "none";
     }
 
+    async function fetchMe(token){
+      const qs = new URLSearchParams({ action:"me", token });
+      const data = await jsonp(`${API_BASE}?${qs.toString()}`);
+      if(!data || data.ok !== true) throw new Error((data && data.message) ? data.message : "No se pudo validar sesión");
+      return data;
+    }
+
     document.getElementById("btnClear").addEventListener("click", ()=>{
       document.getElementById("email").value = "";
       document.getElementById("password").value = "";
@@ -275,18 +280,36 @@
       btn.innerHTML = '<div class="spinner"></div> Entrando…';
 
       try{
+        // 1) Login
         const qs = new URLSearchParams({ action:"login", email, password });
         const data = await jsonp(`${API_BASE}?${qs.toString()}`);
 
-        if(!data || data.ok !== true){
+        if(!data || data.ok !== true) {
           throw new Error((data && data.message) ? data.message : "Login falló");
         }
 
+        // 2) Guardar token
         localStorage.setItem(TOKEN_KEY, data.token);
 
-        // NOTA: sin tocar Apps Script, no sabemos empresa aquí.
-        // Dashboard debe obtener empresa desde URL (?empresa_id=...) o un selector interno.
+        // 3) Guardar empresa_id (preferimos el que venga del login)
+        let emp = (data.empresa_id || "").toString().trim().toLowerCase();
+
+        // 4) Si login no trae empresa_id, lo pedimos por me()
+        if(!emp){
+          const me = await fetchMe(data.token);
+          emp = (me.empresa_id || "").toString().trim().toLowerCase();
+        }
+
+        if(emp){
+          localStorage.setItem(EMPRESA_KEY, emp);
+        }else{
+          // No bloqueamos el acceso: el dashboard puede mostrar un error claro si falta empresa asignada
+          localStorage.removeItem(EMPRESA_KEY);
+        }
+
+        // 5) Ir al dashboard SIN parámetros
         location.href = "dashboard.html";
+
       }catch(err){
         showErr(String(err && err.message ? err.message : err));
         btn.disabled = false;
