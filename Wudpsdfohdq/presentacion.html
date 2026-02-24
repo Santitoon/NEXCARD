@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="es">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Trampa Clean — Expo Horeca</title>
+
+<style>
+
+/* COLORES */
+:root{
+
+--blue:#0E2644;
+--blue2:#103051;
+--orange:#FF4A00;
+
+--bg:#F3F8FF;
+--text:#0B1B33;
+--muted:#55637c;
+
+}
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+
+font-family:system-ui,-apple-system,Segoe UI,Roboto;
+
+background:
+
+radial-gradient(900px 600px at 20% 10%,rgba(14,38,68,.08),transparent),
+
+radial-gradient(800px 600px at 90% 30%,rgba(255,74,0,.06),transparent),
+
+linear-gradient(180deg,#fff,var(--bg));
+
+min-height:100vh;
+
+color:var(--text);
+
+}
+
+
+/* BLOBS FLOTANTES */
+
+.blob{
+
+position:fixed;
+
+width:600px;
+height:600px;
+
+border-radius:999px;
+
+filter:blur(30px);
+
+opacity:.45;
+
+z-index:-2;
+
+animation:float 18s ease-in-out infinite;
+
+}
+
+.b1{
+
+top:-200px;
+left:-200px;
+
+background:
+radial-gradient(circle,rgba(14,38,68,.5),transparent 70%);
+
+}
+
+.b2{
+
+right:-260px;
+top:200px;
+
+background:
+radial-gradient(circle,rgba(255,74,0,.35),transparent 70%);
+
+animation-delay:-5s;
+
+}
+
+@keyframes float{
+
+50%{
+
+transform:translateY(-40px);
+
+}
+
+}
+
+
+/* CONTENEDOR */
+
+.wrap{
+
+width:min(560px,92vw);
+
+margin:auto;
+
+padding:20px 0;
+
+}
+
+
+/* CARD */
+
+.card{
+
+background:rgba(255,255,255,.6);
+
+border-radius:26px;
+
+backdrop-filter:blur(22px);
+
+border:1px solid rgba(14,38,68,.12);
+
+box-shadow:
+
+0 30px 80px rgba(0,0,0,.1);
+
+overflow:hidden;
+
+animation:cardFloat 6s ease-in-out infinite;
+
+}
+
+@keyframes cardFloat{
+
+50%{
+
+transform:translateY(-6px);
+
+}
+
+}
+
+
+/* PANEL AZUL */
+
+.top{
+
+background:
+
+linear-gradient(180deg,var(--blue2),var(--blue));
+
+padding:22px 18px;
+
+color:white;
+
+text-align:center;
+
+}
+
+
+/* LOGOS CENTRADOS */
+
+.logoRow{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+gap:20px;
+
+margin-bottom:14px;
+
+flex-wrap:wrap;
+
+}
+
+.logoRow img{
+
+height:48px;
+
+object-fit:contain;
+
+filter:drop-shadow(0 10px 18px rgba(0,0,0,.3));
+
+}
+
+
+/* TITULO */
+
+.brand h1{
+
+font-size:14px;
+
+letter-spacing:.14em;
+
+text-transform:uppercase;
+
+}
+
+.brand p{
+
+opacity:.8;
+
+font-size:13px;
+
+margin-top:4px;
+
+}
+
+
+/* TEXTO */
+
+.content{
+
+padding:20px;
+
+text-align:center;
+
+}
+
+.content h2{
+
+font-size:22px;
+
+margin-bottom:8px;
+
+}
+
+.content p{
+
+font-size:14px;
+
+color:var(--muted);
+
+}
+
+
+/* CTA */
+
+.ctaWrap{
+
+padding:10px 20px 20px;
+
+}
+
+.cta{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+text-decoration:none;
+
+font-weight:900;
+
+letter-spacing:.05em;
+
+text-transform:uppercase;
+
+padding:15px;
+
+border-radius:18px;
+
+background:
+
+linear-gradient(135deg,var(--orange),#ff7a40);
+
+color:white;
+
+box-shadow:
+
+0 18px 50px rgba(255,74,0,.3);
+
+transition:.2s;
+
+}
+
+.cta:hover{
+
+transform:translateY(-2px);
+
+}
+
+.note{
+
+text-align:center;
+
+font-size:12px;
+
+color:var(--muted);
+
+margin-top:10px;
+
+}
+
+
+/* LINKS TIPO LINKTREE */
+
+.links{
+
+display:grid;
+
+gap:12px;
+
+padding:14px;
+
+}
+
+.link{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+padding:15px;
+
+border-radius:18px;
+
+background:
+
+rgba(255,255,255,.6);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(14,38,68,.1);
+
+text-decoration:none;
+
+color:var(--text);
+
+box-shadow:
+
+0 12px 30px rgba(0,0,0,.06);
+
+transition:.2s;
+
+}
+
+.link:hover{
+
+transform:translateY(-3px);
+
+}
+
+.ico{
+
+width:44px;
+height:44px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+border-radius:14px;
+
+background:
+
+rgba(14,38,68,.06);
+
+font-size:20px;
+
+}
+
+.text b{
+
+display:block;
+
+font-size:15px;
+
+}
+
+.text span{
+
+font-size:13px;
+
+color:var(--muted);
+
+}
+
+.arrow{
+
+margin-left:auto;
+
+opacity:.5;
+
+font-size:20px;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+
+<div class="wrap">
+
+<section class="card">
+
+<div class="top">
+
+<!-- ✅ LOGOS CENTRADOS ARRIBA -->
+
+<div class="logoRow">
+
+<a href="https://expohorecapanama.com/" target="_blank">
+
+<img src="logo-expo.png" alt="Expo Horeca">
+
+</a>
+
+<a href="https://trampaclean.com/" target="_blank">
+
+<img src="logo-trampaclean.png" alt="Trampa Clean">
+
+</a>
+
+</div>
+
+<div class="brand">
+
+<h1>TRAMPA CLEAN SERVICES</h1>
+
+<p>Soluciones profesionales de limpieza</p>
+
+</div>
+
+</div>
+
+
+<div class="content">
+
+<h2>¿Tu trampa de grasa está al día?</h2>
+
+<p>
+
+Si huele mal, se tapa o te preocupa una inspección,
+nosotros lo resolvemos.
+
+Llegamos, limpiamos y dejamos todo en orden.
+
+</p>
+
+</div>
+
+
+<div class="ctaWrap">
+
+<a class="cta"
+
+href="https://nexcard-dev.github.io/NEXCARD/Wudpsdfohdq/?empresa_id=trampaclean&vendedor=trampaclean"
+
+target="_blank">
+
+RECLAMA TU DESCUENTO
+
+</a>
+
+<div class="note">
+
+Regístrate y recibe una recomendación según tu cocina.
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="links">
+
+<a class="link"
+
+href="https://trampaclean.com"
+
+target="_blank">
+
+<div class="ico">🌐</div>
+
+<div class="text">
+
+<b>Visita nuestra web</b>
+
+<span>trampaclean.com</span>
+
+</div>
+
+<div class="arrow">›</div>
+
+</a>
+
+
+
+<a class="link"
+
+href="https://wa.me/50763515950?text=Hola%20Trampa%20Clean%20vengo%20de%20la%20expo"
+
+target="_blank">
+
+<div class="ico">💬</div>
+
+<div class="text">
+
+<b>Contáctanos</b>
+
+<span>WhatsApp directo</span>
+
+</div>
+
+<div class="arrow">›</div>
+
+</a>
+
+
+
+<a class="link"
+
+href="https://instagram.com/trampaclean"
+
+target="_blank">
+
+<div class="ico">📸</div>
+
+<div class="text">
+
+<b>Conócenos</b>
+
+<span>@trampaclean</span>
+
+</div>
+
+<div class="arrow">›</div>
+
+</a>
+
+</section>
+
+</div>
+
+</body>
+</html>
