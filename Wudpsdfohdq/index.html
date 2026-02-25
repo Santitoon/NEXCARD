@@ -6,198 +6,324 @@
 <title>Trampa Clean</title>
 
 <style>
+
 :root{
-  --blue:#0E2644;
-  --blue2:#103051;
-  --orange:#FF4A00;
-  --bg:#F3F8FF;
-  --text:#0B1B33;
-  --muted:#55637c;
+--blue:#0E2644;
+--blue2:#103051;
+--orange:#FF4A00;
+--bg:#F3F8FF;
+--text:#0B1B33;
+--muted:#55637c;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:system-ui,-apple-system,Segoe UI,Roboto;
-  min-height:100vh;
-  background:
-  radial-gradient(800px 500px at 20% 10%,rgba(14,38,68,.08),transparent),
-  radial-gradient(700px 500px at 90% 30%,rgba(255,74,0,.08),transparent),
-  linear-gradient(180deg,#fff,var(--bg));
-  display:flex;
-  justify-content:center;
+
+font-family:system-ui,-apple-system,Segoe UI,Roboto;
+
+min-height:100vh;
+
+background:
+
+radial-gradient(800px 500px at 20% 10%,rgba(14,38,68,.08),transparent),
+
+radial-gradient(700px 500px at 90% 30%,rgba(255,74,0,.08),transparent),
+
+linear-gradient(180deg,#fff,var(--bg));
+
+display:flex;
+
+justify-content:center;
+
 }
 
 .wrap{
-  width:min(520px,92vw);
-  padding:24px 0 40px;
+
+width:min(520px,92vw);
+
+padding:24px 0 40px;
+
 }
 
 .card{
-  background:rgba(255,255,255,.65);
-  backdrop-filter:blur(22px);
-  border-radius:26px;
-  box-shadow:0 30px 80px rgba(0,0,0,.12);
-  overflow:hidden;
+
+background:rgba(255,255,255,.65);
+
+backdrop-filter:blur(22px);
+
+border-radius:26px;
+
+box-shadow:0 30px 80px rgba(0,0,0,.12);
+
+overflow:hidden;
+
 }
 
 /* HEADER */
+
 .top{
-  background:linear-gradient(180deg,var(--blue2),var(--blue));
-  padding:26px 18px 20px;
-  text-align:center;
-  color:white;
+
+background:linear-gradient(180deg,var(--blue2),var(--blue));
+
+padding:26px 18px 20px;
+
+text-align:center;
+
+color:white;
+
 }
 
 .logoBox{
-  width:220px;
-  height:90px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+
+width:220px;
+
+height:90px;
+
+margin:auto;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
 }
 
 .logoBox img{
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;
+
+max-width:100%;
+
+max-height:100%;
+
+object-fit:contain;
+
 }
 
 /* CONTENT */
+
 .content{
-  padding:24px;
-  text-align:center;
+
+padding:24px;
+
+text-align:center;
+
 }
 
 .content h2{
-  font-size:22px;
-  margin-bottom:12px;
+
+font-size:22px;
+
+margin-bottom:12px;
+
 }
 
 .content p{
-  font-size:14px;
-  color:var(--muted);
-  line-height:1.5;
+
+font-size:14px;
+
+color:var(--muted);
+
+line-height:1.5;
+
 }
 
 /* CTA */
-.ctaWrap{padding:0 24px 24px;}
 
-.cta{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:16px;
-  border-radius:18px;
-  background:linear-gradient(135deg,var(--orange),#ff7a40);
-  color:white;
-  text-decoration:none;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-  box-shadow:0 18px 50px rgba(255,74,0,.35);
-  transition:.2s;
+.ctaWrap{
+
+padding:0 24px 24px;
+
 }
 
-.cta:hover{transform:translateY(-2px);}
+.cta{
 
-.note{
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  margin-top:10px;
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+padding:16px;
+
+border-radius:18px;
+
+background:linear-gradient(135deg,var(--orange),#ff7a40);
+
+color:white;
+
+text-decoration:none;
+
+font-weight:800;
+
+text-transform:uppercase;
+
+letter-spacing:.05em;
+
+box-shadow:0 18px 50px rgba(255,74,0,.35);
+
+transition:.2s;
+
+}
+
+.cta:hover{
+
+transform:translateY(-2px);
+
 }
 
 /* LINKS */
+
 .links{
-  display:grid;
-  gap:12px;
-  padding:16px;
+
+display:grid;
+
+gap:12px;
+
+padding:16px;
+
 }
 
 .link{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:16px;
-  border-radius:18px;
-  background:rgba(255,255,255,.7);
-  backdrop-filter:blur(16px);
-  text-decoration:none;
-  color:var(--text);
-  box-shadow:0 12px 30px rgba(0,0,0,.08);
-  transition:.2s;
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+padding:16px;
+
+border-radius:18px;
+
+background:rgba(255,255,255,.7);
+
+backdrop-filter:blur(16px);
+
+text-decoration:none;
+
+color:var(--text);
+
+box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+transition:.2s;
+
 }
 
-.link:hover{transform:translateY(-3px);}
+.link:hover{
+
+transform:translateY(-3px);
+
+}
+
+/* ICON IMAGES */
 
 .icon{
-  width:40px;
-  height:40px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+
+width:40px;
+
+height:40px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
 }
 
-.icon svg{
-  width:26px;
-  height:26px;
+.icon img{
+
+width:100%;
+
+height:100%;
+
+object-fit:contain;
+
 }
 
-.text b{display:block;font-size:15px;}
-.text span{font-size:13px;color:var(--muted);}
-.arrow{margin-left:auto;opacity:.5;}
+.text b{
 
-/* CONTACT FOOTER */
+display:block;
+
+font-size:15px;
+
+}
+
+.text span{
+
+font-size:13px;
+
+color:var(--muted);
+
+}
+
+.arrow{
+
+margin-left:auto;
+
+opacity:.5;
+
+}
+
+/* CONTACT */
+
 .contactFooter{
-  margin-top:20px;
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-}
 
-.contactFooter a{
-  display:block;
-  text-decoration:none;
-  color:var(--blue);
-  font-weight:600;
-  margin-top:6px;
-}
+padding:10px 16px;
 
-.contactFooter a:hover{
-  text-decoration:underline;
+display:grid;
+
+gap:12px;
+
 }
 
 </style>
+
 </head>
 
 <body>
+
 <div class="wrap">
 
 <section class="card">
 
 <div class="top">
-  <div class="logoBox">
-    <img src="TCLOGO.png" alt="TCLOGO">
-  </div>
+
+<div class="logoBox">
+
+<img src="TCLOGO.png">
+
+</div>
+
 </div>
 
 <div class="content">
-  <h2>¿Tu trampa de grasa está al día?</h2>
-  <p>
-    Eliminamos olores, evitamos obstrucciones y cumplimos con normas sanitarias.
-    Servicio profesional para restaurantes y cocinas comerciales.
-  </p>
+
+<h2>¿Tu trampa de grasa está al día?</h2>
+
+<p>
+
+Eliminamos olores, evitamos obstrucciones y cumplimos normas sanitarias.
+
+Servicio profesional para restaurantes y cocinas comerciales.
+
+</p>
+
 </div>
 
 <div class="ctaWrap">
-  <a class="cta"
-     href="https://nexcard-dev.github.io/NEXCARD/Wudpsdfohdq/form?empresa_id=trampaclean&vendedor=trampaclean"
-     target="_blank">
-     RECLAMA TU DESCUENTO
-  </a>
-  <div class="note">Escanea y recibe atención personalizada.</div>
+
+<a class="cta"
+
+href="https://nexcard-dev.github.io/NEXCARD/Wudpsdfohdq/form?empresa_id=trampaclean&vendedor=trampaclean"
+
+target="_blank">
+
+RECLAMA TU DESCUENTO
+
+</a>
+
 </div>
 
 </section>
@@ -205,48 +331,123 @@ body{
 <section class="links">
 
 <a class="link" href="https://trampaclean.com" target="_blank">
+
 <div class="icon">
-🌐
+
+<img src="icon-web.png">
+
 </div>
-  <div class="text">
-    <b>Visita nuestra web</b>
-    <span>trampaclean.com</span>
-  </div>
-  <div class="arrow">›</div>
+
+<div class="text">
+
+<b>Visita nuestra web</b>
+
+<span>trampaclean.com</span>
+
+</div>
+
+<div class="arrow">›</div>
+
 </a>
+
 
 <a class="link"
-   href="https://wa.me/50763515950?text=Hola%20Trampa%20Clean%20vengo%20de%20la%20expo"
-   target="_blank">
-  <div class="icon">
-🟢
-  </div>
-  <div class="text">
-    <b>Contáctanos</b>
-    <span>WhatsApp directo</span>
-  </div>
-  <div class="arrow">›</div>
+
+href="https://wa.me/50763515950?text=Hola%20Trampa%20Clean%20vengo%20de%20la%20expo"
+
+target="_blank">
+
+<div class="icon">
+
+<img src="whatsapp.png">
+
+</div>
+
+<div class="text">
+
+<b>Contáctanos</b>
+
+<span>WhatsApp directo</span>
+
+</div>
+
+<div class="arrow">›</div>
+
 </a>
 
-<a class="link" href="https://instagram.com/trampaclean" target="_blank">
-  <div class="icon">
-📸
-  </div>
-  <div class="text">
-    <b>Conócenos</b>
-    <span>@trampaclean</span>
-  </div>
-  <div class="arrow">›</div>
+
+<a class="link"
+
+href="https://instagram.com/trampaclean"
+
+target="_blank">
+
+<div class="icon">
+
+<img src="instagram.png">
+
+</div>
+
+<div class="text">
+
+<b>Conócenos</b>
+
+<span>@trampaclean</span>
+
+</div>
+
+<div class="arrow">›</div>
+
 </a>
 
 </section>
 
-<!-- CONTACTO FUNCIONAL -->
-<div class="contactFooter">
-  <a href="tel:3991156">📞 399-1156</a>
-  <a href="mailto:info@trampaclean.com">✉ info@trampaclean.com</a>
-</div>
+
+<!-- CONTACTO -->
+
+<section class="contactFooter">
+
+<a class="link" href="tel:3991156">
+
+<div class="icon">
+
+<img src="icon-phone.png">
 
 </div>
+
+<div class="text">
+
+<b>Llámanos</b>
+
+<span>399-1156</span>
+
+</div>
+
+</a>
+
+
+<a class="link" href="mailto:info@trampaclean.com">
+
+<div class="icon">
+
+<img src="icon-email.png">
+
+</div>
+
+<div class="text">
+
+<b>Correo electrónico</b>
+
+<span>info@trampaclean.com</span>
+
+</div>
+
+</a>
+
+</section>
+
+</div>
+
 </body>
+
 </html>
