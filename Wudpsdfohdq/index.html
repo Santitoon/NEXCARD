@@ -1,268 +1,315 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Trampa Clean</title>
 
 <style>
+
 :root{
-  --blue:#0E2644;
-  --blue2:#103051;
-  --orange:#FF4A00;
-  --bg:#F3F8FF;
-  --text:#0B1B33;
-  --muted:#55637c;
+--blue:#0E2644;
+--blue2:#103051;
+--orange:#FF4A00;
+--bg:#F3F8FF;
+--text:#0B1B33;
+--muted:#55637c;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:system-ui,-apple-system,Segoe UI,Roboto;
-  min-height:100vh;
-  background:
-    radial-gradient(800px 500px at 20% 10%,rgba(14,38,68,.08),transparent),
-    radial-gradient(700px 500px at 90% 30%,rgba(255,74,0,.08),transparent),
-    linear-gradient(180deg,#fff,var(--bg));
-  display:flex;
-  justify-content:center;
+font-family:system-ui,-apple-system,Segoe UI,Roboto;
+min-height:100vh;
+background:
+radial-gradient(800px 500px at 20% 10%,rgba(14,38,68,.08),transparent),
+radial-gradient(700px 500px at 90% 30%,rgba(255,74,0,.08),transparent),
+linear-gradient(180deg,#fff,var(--bg));
+display:flex;
+justify-content:center;
 }
 
 .wrap{
-  width:min(520px,92vw);
-  padding:24px 0 40px;
+width:min(520px,92vw);
+padding:24px 0 40px;
 }
 
 .card{
-  background:rgba(255,255,255,.65);
-  backdrop-filter:blur(22px);
-  border-radius:26px;
-  box-shadow:0 30px 80px rgba(0,0,0,.12);
-  overflow:hidden;
+background:rgba(255,255,255,.65);
+backdrop-filter:blur(22px);
+border-radius:26px;
+box-shadow:0 30px 80px rgba(0,0,0,.12);
+overflow:hidden;
 }
 
-/* HEADER */
 .top{
-  background:linear-gradient(180deg,var(--blue2),var(--blue));
-  padding:26px 18px 20px;
-  text-align:center;
-  color:white;
+background:linear-gradient(180deg,var(--blue2),var(--blue));
+padding:26px 18px 20px;
+text-align:center;
+color:white;
 }
 
 .logoBox{
-  width:220px;
-  height:90px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+width:220px;
+height:90px;
+margin:auto;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 .logoBox img{
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;
+max-width:100%;
+max-height:100%;
+object-fit:contain;
 }
 
-/* CONTENT */
 .content{
-  padding:24px;
-  text-align:center;
+padding:24px;
+text-align:center;
 }
 
 .content h2{
-  font-size:22px;
-  margin-bottom:12px;
+font-size:22px;
+margin-bottom:12px;
 }
 
 .content p{
-  font-size:14px;
-  color:var(--muted);
-  line-height:1.5;
+font-size:14px;
+color:var(--muted);
+line-height:1.5;
 }
 
-/* CTA */
 .ctaWrap{padding:0 24px 24px;}
 
 .cta{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:16px;
-  border-radius:18px;
-  background:linear-gradient(135deg,var(--orange),#ff7a40);
-  color:white;
-  text-decoration:none;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-  box-shadow:0 18px 50px rgba(255,74,0,.35);
-  transition:.2s;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:16px;
+border-radius:18px;
+background:linear-gradient(135deg,var(--orange),#ff7a40);
+color:white;
+text-decoration:none;
+font-weight:800;
+text-transform:uppercase;
+letter-spacing:.05em;
+box-shadow:0 18px 50px rgba(255,74,0,.35);
+transition:.2s;
 }
 
 .cta:hover{transform:translateY(-2px);}
 
 .note{
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  margin-top:10px;
+text-align:center;
+font-size:12px;
+color:var(--muted);
+margin-top:10px;
 }
 
-/* LINKS */
 .links{
-  display:grid;
-  gap:12px;
-  padding:16px;
+display:grid;
+gap:12px;
+padding:16px;
 }
 
 .link{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:16px;
-  border-radius:18px;
-  background:rgba(255,255,255,.7);
-  backdrop-filter:blur(16px);
-  text-decoration:none;
-  color:var(--text);
-  box-shadow:0 12px 30px rgba(0,0,0,.08);
-  transition:.2s;
+display:flex;
+align-items:center;
+gap:14px;
+padding:16px;
+border-radius:18px;
+background:rgba(255,255,255,.7);
+backdrop-filter:blur(16px);
+text-decoration:none;
+color:var(--text);
+box-shadow:0 12px 30px rgba(0,0,0,.08);
+transition:.2s;
 }
 
 .link:hover{transform:translateY(-3px);}
 
 .icon{
-  width:44px;
-  height:44px;
-  border-radius:12px;
-  overflow:hidden;
-  flex:0 0 44px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,.04);
+width:44px;
+height:44px;
+border-radius:12px;
+overflow:hidden;
+flex:0 0 44px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.04);
 }
 
 .icon img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
 .text b{display:block;font-size:15px;}
 .text span{font-size:13px;color:var(--muted);}
-.arrow{margin-left:auto;opacity:.5;font-size:18px;line-height:1;}
+.arrow{margin-left:auto;opacity:.5;font-size:18px;}
+
 </style>
 </head>
 
 <body>
+
 <div class="wrap">
 
 <section class="card">
 
-  <div class="top">
-    <div class="logoBox">
-      <img src="TCLOGO.png" alt="Trampa Clean Services">
-    </div>
-  </div>
+<div class="top">
+<div class="logoBox">
+<img src="TCLOGO.png">
+</div>
+</div>
 
-  <div class="content">
-    <h2>Evita emergencias, olores y sanciones en tu cocina</h2>
-    <p>
-      Eliminamos olores, evitamos obstrucciones y cumplimos con normas sanitarias.
-      Servicio profesional para restaurantes y cocinas comerciales.
-    </p>
-  </div>
+<div class="content">
+<h2>Servicios Profesionales de Limpieza</h2>
 
-  <div class="ctaWrap">
-    <a class="cta"
-       href="https://nexcard-dev.github.io/NEXCARD/Wudpsdfohdq/form?empresa_id=trampaclean&vendedor=trampaclean"
-       target="_blank" rel="noopener">
-       OBTÉN TU 25% DE DESCUENTO
-    </a>
-    <div class="note">Escanea y recibe atención personalizada.</div>
-  </div>
+<p>
+
+Trampas de Grasa - Destape de Tuberías - BIODREXA (Tratamiento de Grasas y Aceites) - Limpieza de Campanas de Cocina -Auditorias - Inspecciones Tecnicas. Contamos con RESOLUCIÓN DE MINSA
+</p>
+</div>
+
+<div class="ctaWrap">
+
+<a class="cta"
+href="https://nexcard-dev.github.io/NEXCARD/Wudpsdfohdq/form?empresa_id=trampaclean&vendedor=trampaclean"
+target="_blank">
+
+OBTEN TU 25% DE DESCUENTO
+
+</a>
+
+<div class="note">
+Escanea y recibe atención personalizada.
+</div>
+
+</div>
 
 </section>
 
 <section class="links">
 
-  <!-- ===== 1) PDF ===== -->
-  <!-- Cambia esta URL por tu PDF -->
-  <a class="link" href="PDF_URL_AQUI.pdf" target="_blank" rel="noopener">
-    <div class="icon">
-      <img src="pdf.png" alt="PDF">
-    </div>
-    <div class="text">
-      <b>Ver PDF</b>
-      <span>Catálogo / Brochure</span>
-    </div>
-    <div class="arrow">›</div>
-  </a>
+<!-- 1 WHATSAPP -->
+<a class="link"
+href="https://wa.me/50763515950?text=Hola%20Trampa%20Clean%20vengo%20de%20la%20expo"
+target="_blank">
 
-  <!-- ===== 2) WEB ===== -->
-  <a class="link" href="https://trampaclean.com" target="_blank" rel="noopener">
-    <div class="icon">
-      <img src="web.png" alt="Web">
-    </div>
-    <div class="text">
-      <b>Visita nuestra web</b>
-      <span>trampaclean.com</span>
-    </div>
-    <div class="arrow">›</div>
-  </a>
+<div class="icon">
+<img src="whatsapp.png">
+</div>
 
-  <!-- ===== 3) INSTAGRAM ===== -->
-  <a class="link" href="https://instagram.com/trampaclean" target="_blank" rel="noopener">
-    <div class="icon">
-      <img src="instagram.png" alt="Instagram">
-    </div>
-    <div class="text">
-      <b>Conócenos</b>
-      <span>@trampaclean</span>
-    </div>
-    <div class="arrow">›</div>
-  </a>
+<div class="text">
+<b>Contáctanos</b>
+<span>WhatsApp directo</span>
+</div>
 
-  <!-- ===== 4) CORREO ===== -->
-  <a class="link" href="mailto:info@trampaclean.com?subject=Consulta%20desde%20la%20Expo&body=Hola%20Trampa%20Clean,%20vengo%20de%20la%20expo%20y%20quiero%20informaci%C3%B3n.">
-    <div class="icon">
-      <img src="email.png" alt="Correo">
-    </div>
-    <div class="text">
-      <b>Correo electrónico</b>
-      <span>info@trampaclean.com</span>
-    </div>
-    <div class="arrow">›</div>
-  </a>
+<div class="arrow">›</div>
 
-  <!-- ===== 5) WHATSAPP ===== -->
-  <a class="link" href="https://wa.me/50763515950?text=Hola%20Trampa%20Clean%20vengo%20de%20la%20expo" target="_blank" rel="noopener">
-    <div class="icon">
-      <img src="whatsapp.png" alt="WhatsApp">
-    </div>
-    <div class="text">
-      <b>Contáctanos</b>
-      <span>WhatsApp directo</span>
-    </div>
-    <div class="arrow">›</div>
-  </a>
+</a>
 
-  <!-- ===== 6) TELÉFONO FIJO ===== -->
-  <a class="link" href="tel:3991156">
-    <div class="icon">
-      <img src="telefono.png" alt="Teléfono">
-    </div>
-    <div class="text">
-      <b>Llámanos</b>
-      <span>399-1156</span>
-    </div>
-    <div class="arrow">›</div>
-  </a>
+
+<!-- 2 WEB -->
+<a class="link"
+href="https://trampaclean.com"
+target="_blank">
+
+<div class="icon">
+<img src="web.png">
+</div>
+
+<div class="text">
+<b>Visita nuestra web</b>
+<span>trampaclean.com</span>
+</div>
+
+<div class="arrow">›</div>
+
+</a>
+
+
+<!-- 3 INSTAGRAM -->
+<a class="link"
+href="https://instagram.com/trampaclean"
+target="_blank">
+
+<div class="icon">
+<img src="instagram.png">
+</div>
+
+<div class="text">
+<b>Conócenos</b>
+<span>@trampaclean</span>
+</div>
+
+<div class="arrow">›</div>
+
+</a>
+
+
+<!-- 4 EMAIL -->
+<a class="link"
+href="mailto:info@trampaclean.com?subject=Consulta%20desde%20la%20Expo">
+
+<div class="icon">
+<img src="email.png">
+</div>
+
+<div class="text">
+<b>Correo electrónico</b>
+<span>info@trampaclean.com</span>
+</div>
+
+<div class="arrow">›</div>
+
+</a>
+
+
+<!-- 5 TELEFONO -->
+<a class="link"
+href="tel:3991156">
+
+<div class="icon">
+<img src="telefono.png">
+</div>
+
+<div class="text">
+<b>Llámanos</b>
+<span>399-1156</span>
+</div>
+
+<div class="arrow">›</div>
+
+</a>
+
+
+<!-- 6 PDF -->
+<a class="link"
+href="brochure.pdf"
+target="_blank">
+
+<div class="icon">
+<img src="pdf.png">
+</div>
+
+<div class="text">
+<b>Ver PDF</b>
+<span>Catálogo / Brochure</span>
+</div>
+
+<div class="arrow">›</div>
+
+</a>
+
 
 </section>
 
 </div>
+
 </body>
 </html>
