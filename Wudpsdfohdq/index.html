@@ -1,418 +1,238 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Trampa Clean — Expo</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trampa Clean</title>
 
-  <style>
-    :root{
-      --blue:#0E2644;
-      --blue2:#103051;
-      --orange:#FF4A00;
+<style>
+:root{
+  --blue:#0E2644;
+  --blue2:#103051;
+  --orange:#FF4A00;
+  --bg:#F3F8FF;
+  --text:#0B1B33;
+  --muted:#55637c;
+}
 
-      --bg:#F3F8FF;
-      --text:#0B1B33;
-      --muted:#55637c;
+*{margin:0;padding:0;box-sizing:border-box;}
 
-      --glass: rgba(255,255,255,.65);
-      --glass2: rgba(255,255,255,.58);
-      --border: rgba(14,38,68,.12);
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto;
+  min-height:100vh;
+  background:
+  radial-gradient(800px 500px at 20% 10%,rgba(14,38,68,.08),transparent),
+  radial-gradient(700px 500px at 90% 30%,rgba(255,74,0,.08),transparent),
+  linear-gradient(180deg,#fff,var(--bg));
+  display:flex;
+  justify-content:center;
+}
 
-      --shadow: 0 28px 80px rgba(0,0,0,.12);
-      --radius: 26px;
-      --blur: 22px;
-    }
+.wrap{
+  width:min(520px,92vw);
+  padding:24px 0 40px;
+}
 
-    *{ margin:0; padding:0; box-sizing:border-box; }
-    body{
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      color: var(--text);
-      min-height:100vh;
-      background:
-        radial-gradient(900px 600px at 15% 10%,rgba(14,38,68,.08),transparent),
-        radial-gradient(800px 600px at 90% 20%,rgba(255,74,0,.06),transparent),
-        linear-gradient(180deg,#fff,var(--bg));
-      overflow-x:hidden;
-    }
+.card{
+  background:rgba(255,255,255,.65);
+  backdrop-filter:blur(22px);
+  border-radius:26px;
+  box-shadow:0 30px 80px rgba(0,0,0,.12);
+  overflow:hidden;
+}
 
-    /* blobs */
-    .blob{
-      position:fixed;
-      width:640px; height:640px;
-      border-radius:999px;
-      filter: blur(32px);
-      opacity:.45;
-      z-index:-2;
-      pointer-events:none;
-      animation: float 18s ease-in-out infinite;
-    }
-    .b1{ top:-220px; left:-220px; background: radial-gradient(circle,rgba(14,38,68,.52),transparent 70%); }
-    .b2{ right:-280px; top:260px; background: radial-gradient(circle,rgba(255,74,0,.35),transparent 70%); animation-delay:-6s; }
-    @keyframes float{ 50%{ transform: translateY(-45px); } }
+/* HEADER */
+.top{
+  background:linear-gradient(180deg,var(--blue2),var(--blue));
+  padding:26px 18px 20px;
+  text-align:center;
+  color:white;
+}
 
-    /* layout */
-    .wrap{
-      width:min(560px,92vw);
-      margin:0 auto;
-      padding:22px 0 34px;
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      justify-content:flex-start;
-    }
+.logoBox{
+  width:220px;
+  height:90px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-    /* entrance (safe) */
-    .scanEnter{ opacity:1; transform:none; filter:none; }
-    body.animate .scanEnter{
-      opacity:0;
-      transform: translateY(14px) scale(.99);
-      filter: blur(10px);
-      animation: enter 700ms cubic-bezier(.2,.8,.2,1) forwards;
-    }
-    @keyframes enter{
-      to{ opacity:1; transform: translateY(0) scale(1); filter: blur(0); }
-    }
+.logoBox img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
 
-    /* card */
-    .card{
-      background: var(--glass);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      backdrop-filter: blur(var(--blur));
-      -webkit-backdrop-filter: blur(var(--blur));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-      animation: cardFloat 6s ease-in-out infinite;
-      will-change: transform;
-    }
-    @keyframes cardFloat{ 50%{ transform: translateY(-7px); } }
+/* CONTENT */
+.content{
+  padding:24px;
+  text-align:center;
+}
 
-    .card:after{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius: var(--radius);
-      padding:1px;
-      background: linear-gradient(135deg,
-        rgba(255,255,255,.55),
-        rgba(14,38,68,.10),
-        rgba(255,74,0,.10),
-        rgba(255,255,255,.35)
-      );
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events:none;
-      opacity:.85;
-    }
+.content h2{
+  font-size:22px;
+  margin-bottom:12px;
+}
 
-    .top{
-      background: linear-gradient(180deg,var(--blue2),var(--blue));
-      padding:24px 18px 18px;
-      text-align:center;
-      color:white;
-      position:relative;
-    }
-    .top:before{
-      content:"";
-      position:absolute;
-      inset:-45%;
-      background:
-        radial-gradient(circle at 30% 20%, rgba(255,255,255,.18), transparent 52%),
-        radial-gradient(circle at 70% 75%, rgba(255,74,0,.12), transparent 55%);
-      filter: blur(10px);
-      opacity:.9;
-      pointer-events:none;
-    }
+.content p{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.5;
+}
 
-    /* ✅ LOGOS ALINEADOS PRO */
-    .logoRow{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:24px;
-      flex-wrap:wrap;
-      margin-bottom:18px;
-      position:relative;
-      z-index:1;
-    }
+/* CTA */
+.ctaWrap{padding:0 24px 24px;}
 
-    .logoLink{
-      text-decoration:none;
-      background: rgba(255,255,255,.10);
-      border-radius:22px;
-      padding:12px;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border:1px solid rgba(255,255,255,.18);
-      box-shadow:
-        0 16px 40px rgba(0,0,0,.18),
-        inset 0 0 0 1px rgba(255,255,255,.08);
-      transition:.25s;
-      position:relative;
-      overflow:hidden;
-    }
-    .logoLink:hover{ transform: translateY(-3px); }
+.cta{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:16px;
+  border-radius:18px;
+  background:linear-gradient(135deg,var(--orange),#ff7a40);
+  color:white;
+  text-decoration:none;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  box-shadow:0 18px 50px rgba(255,74,0,.35);
+  transition:.2s;
+}
 
-    /* shine suave */
-    .logoLink:before{
-      content:"";
-      position:absolute;
-      inset:-40%;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255,255,255,.15) 45%,
-        rgba(255,255,255,.40) 52%,
-        rgba(255,255,255,.15) 58%,
-        transparent 100%
-      );
-      transform: rotate(12deg) translateX(-60%);
-      animation: shine 3.8s ease-in-out infinite;
-      opacity:.75;
-      pointer-events:none;
-    }
-    @keyframes shine{
-      0%{ transform: rotate(12deg) translateX(-65%); }
-      55%{ transform: rotate(12deg) translateX(65%); }
-      100%{ transform: rotate(12deg) translateX(65%); }
-    }
+.cta:hover{transform:translateY(-2px);}
 
-    .logoBox{
-      width:210px;
-      height:80px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-      z-index:1;
-    }
-    .logoBox img{
-      max-width:90%;
-      max-height:90%;
-      width:auto;
-      height:auto;
-      object-fit:contain;
-      display:block;
-      filter: drop-shadow(0 8px 14px rgba(0,0,0,.25));
-    }
+.note{
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:10px;
+}
 
-    @media(max-width:420px){
-      .logoBox{ width:170px; height:65px; }
-    }
+/* LINKS */
+.links{
+  display:grid;
+  gap:12px;
+  padding:16px;
+}
 
-    /* header text */
-    .brand h1{
-      font-size:14px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      position:relative;
-      z-index:1;
-    }
-    .brand p{
-      opacity:.85;
-      font-size:13px;
-      margin-top:4px;
-      position:relative;
-      z-index:1;
-    }
+.link{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:16px;
+  border-radius:18px;
+  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(16px);
+  text-decoration:none;
+  color:var(--text);
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  transition:.2s;
+}
 
-    /* content */
-    .content{ padding:22px; text-align:center; }
-    .content h2{ font-size:22px; margin-bottom:10px; }
-    .content p{ font-size:14px; color:var(--muted); line-height:1.5; }
+.link:hover{transform:translateY(-3px);}
 
-    /* CTA glow */
-    .ctaWrap{ padding:0 22px 22px; }
-    .cta{
-      position:relative;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      padding:16px;
-      border-radius:18px;
-      text-decoration:none;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-      color:white;
-      background: linear-gradient(135deg,var(--orange),#ff7a40);
-      box-shadow: 0 18px 50px rgba(255,74,0,.30);
-      transition: transform .2s, filter .2s;
-      overflow:hidden;
-    }
-    .cta:hover{ transform: translateY(-2px); filter: brightness(1.02); }
+.icon{
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-    .cta:before{
-      content:"";
-      position:absolute;
-      inset:-40%;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255,255,255,.20) 45%,
-        rgba(255,255,255,.55) 52%,
-        rgba(255,255,255,.20) 58%,
-        transparent 100%
-      );
-      transform: rotate(12deg) translateX(-60%);
-      animation: ctaShine 2.8s ease-in-out infinite;
-      pointer-events:none;
-      opacity:.85;
-    }
-    @keyframes ctaShine{
-      0%{ transform: rotate(12deg) translateX(-65%); }
-      55%{ transform: rotate(12deg) translateX(65%); }
-      100%{ transform: rotate(12deg) translateX(65%); }
-    }
-    .cta:after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      border-radius: 20px;
-      background: radial-gradient(circle at 30% 35%, rgba(255,255,255,.25), transparent 55%),
-                  radial-gradient(circle at 70% 70%, rgba(255,255,255,.18), transparent 60%);
-      filter: blur(10px);
-      opacity:.8;
-      animation: pulse 1.9s ease-in-out infinite;
-      pointer-events:none;
-    }
-    @keyframes pulse{
-      0%,100%{ opacity:.55; transform: scale(1); }
-      50%{ opacity:.95; transform: scale(1.01); }
-    }
+.icon svg{
+  width:26px;
+  height:26px;
+}
 
-    .note{ text-align:center; font-size:12px; color:var(--muted); margin-top:10px; }
-
-    /* links */
-    .links{
-      display:grid;
-      gap:12px;
-      padding:14px;
-    }
-    .link{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      padding:16px;
-      border-radius:18px;
-      background: var(--glass2);
-      border:1px solid rgba(14,38,68,.10);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      text-decoration:none;
-      color:var(--text);
-      box-shadow: 0 12px 32px rgba(0,0,0,.06);
-      transition: transform .2s, background .2s;
-    }
-    .link:hover{ transform: translateY(-3px); background: rgba(255,255,255,.72); }
-    .ico{
-      width:44px; height:44px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:14px;
-      background: rgba(14,38,68,.06);
-      font-size:20px;
-      flex:0 0 auto;
-    }
-    .text b{ display:block; font-size:15px; }
-    .text span{ font-size:13px; color:var(--muted); }
-    .arrow{ margin-left:auto; font-size:20px; opacity:.5; }
-
-    @media (prefers-reduced-motion: reduce){
-      .blob, .card, .cta, .logoLink{ animation:none !important; }
-      .logoLink:before, .cta:before, .cta:after{ animation:none !important; }
-      .link, .cta{ transition:none !important; }
-      body.animate .scanEnter{ animation:none !important; opacity:1 !important; transform:none !important; filter:none !important; }
-    }
-  </style>
+.text b{display:block;font-size:15px;}
+.text span{font-size:13px;color:var(--muted);}
+.arrow{margin-left:auto;opacity:.5;}
+</style>
 </head>
 
 <body>
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
+<div class="wrap">
 
-  <div class="wrap">
-    <section class="card scanEnter" id="mainCard">
-      <div class="top">
-        <div class="logoRow">
-          <a class="logoLink" href="https://expohorecapanama.com/" target="_blank" rel="noopener">
-            <div class="logoBox">
-              <img src="logo-biodrexa-fog-expo-pro.png" alt="Expo Biodrexa">
-            </div>
-          </a>
+<section class="card">
 
-          <a class="logoLink" href="https://trampaclean.com/" target="_blank" rel="noopener">
-            <div class="logoBox">
-              <img src="logo-trampaclean-services-expo-pro.png" alt="Trampa Clean">
-            </div>
-          </a>
-        </div>
-
-        <div class="brand">
-          <h1>TRAMPA CLEAN SERVICES</h1>
-          <p>Soluciones profesionales de limpieza</p>
-        </div>
-      </div>
-
-      <div class="content">
-        <h2>¿Tu trampa de grasa está al día?</h2>
-        <p>
-          Si huele mal, se tapa o te preocupa una inspección, nosotros lo resolvemos.
-          Llegamos, limpiamos y dejamos todo en orden.
-        </p>
-      </div>
-
-      <div class="ctaWrap">
-        <a class="cta"
-           href="https://nexcard-dev.github.io/NEXCARD/Wudpsdfohdq/?empresa_id=trampaclean&vendedor=trampaclean"
-           target="_blank" rel="noopener">
-          RECLAMA TU DESCUENTO
-        </a>
-        <div class="note">Regístrate y recibe una recomendación según tu cocina.</div>
-      </div>
-    </section>
-
-    <section class="links scanEnter" style="animation-delay:120ms;">
-      <a class="link" href="https://trampaclean.com" target="_blank" rel="noopener">
-        <div class="ico">🌐</div>
-        <div class="text">
-          <b>Visita nuestra web</b>
-          <span>trampaclean.com</span>
-        </div>
-        <div class="arrow">›</div>
-      </a>
-
-      <a class="link"
-         href="https://wa.me/50763515950?text=Hola%20Trampa%20Clean%20vengo%20de%20la%20expo"
-         target="_blank" rel="noopener">
-        <div class="ico">💬</div>
-        <div class="text">
-          <b>Contáctanos</b>
-          <span>WhatsApp directo</span>
-        </div>
-        <div class="arrow">›</div>
-      </a>
-
-      <a class="link" href="https://instagram.com/trampaclean" target="_blank" rel="noopener">
-        <div class="ico">📸</div>
-        <div class="text">
-          <b>Conócenos</b>
-          <span>@trampaclean</span>
-        </div>
-        <div class="arrow">›</div>
-      </a>
-    </section>
+<div class="top">
+  <div class="logoBox">
+    <img src="logo-trampaclean-final-expo.png" alt="Trampa Clean">
   </div>
+</div>
 
-  <script>
-    window.addEventListener("load", () => {
-      document.body.classList.add("animate");
-    });
-  </script>
+<div class="content">
+  <h2>¿Tu trampa de grasa está al día?</h2>
+  <p>
+    Eliminamos olores, evitamos obstrucciones y cumplimos con normas sanitarias.
+    Servicio profesional para restaurantes y cocinas comerciales.
+  </p>
+</div>
+
+<div class="ctaWrap">
+  <a class="cta"
+     href="https://nexcard-dev.github.io/NEXCARD/Wudpsdfohdq/?empresa_id=trampaclean&vendedor=trampaclean"
+     target="_blank">
+     RECLAMA TU DESCUENTO
+  </a>
+  <div class="note">Escanea y recibe atención personalizada.</div>
+</div>
+
+</section>
+
+<section class="links">
+
+<a class="link" href="https://trampaclean.com" target="_blank">
+  <div class="icon">
+    🌐
+  </div>
+  <div class="text">
+    <b>Visita nuestra web</b>
+    <span>trampaclean.com</span>
+  </div>
+  <div class="arrow">›</div>
+</a>
+
+<a class="link"
+   href="https://wa.me/50763515950?text=Hola%20Trampa%20Clean%20vengo%20de%20la%20expo"
+   target="_blank">
+  <div class="icon">
+    <!-- WhatsApp SVG -->
+    <svg fill="#25D366" viewBox="0 0 24 24">
+      <path d="M12 2a10 10 0 00-8.94 14.47L2 22l5.7-1.49A10 10 0 1012 2zm5.47 13.53c-.23.64-1.33 1.2-1.82 1.27-.46.07-1.05.1-1.69-.1a13.66 13.66 0 01-3.97-2.44 11.17 11.17 0 01-2.48-3.07c-.26-.46-.02-.7.2-.93.2-.2.46-.53.7-.8.23-.27.3-.46.46-.76.15-.3.07-.57-.04-.8-.12-.23-1.05-2.53-1.44-3.47-.38-.9-.77-.78-1.05-.8h-.9c-.3 0-.8.12-1.2.57-.4.46-1.57 1.53-1.57 3.73 0 2.2 1.6 4.32 1.83 4.62.23.3 3.15 4.8 7.63 6.73 1.07.46 1.9.73 2.55.93 1.07.34 2.04.29 2.81.17.86-.13 2.65-1.08 3.03-2.12.38-1.04.38-1.93.27-2.12-.12-.2-.42-.3-.88-.53-.46-.23-2.65-1.3-3.06-1.45-.42-.15-.72-.23-1.03.23-.3.46-1.2 1.45-1.47 1.75-.27.3-.54.34-1 .11-.46-.23-1.93-.71-3.68-2.27-1.36-1.22-2.27-2.72-2.54-3.18-.27-.46-.03-.7.2-.92.2-.2.46-.53.7-.8.23-.27.3-.46.46-.76.15-.3.07-.57-.04-.8-.12-.23-1.05-2.53-1.44-3.47"/>
+    </svg>
+  </div>
+  <div class="text">
+    <b>Contáctanos</b>
+    <span>WhatsApp directo</span>
+  </div>
+  <div class="arrow">›</div>
+</a>
+
+<a class="link" href="https://instagram.com/trampaclean" target="_blank">
+  <div class="icon">
+    <!-- Instagram SVG -->
+    <svg viewBox="0 0 24 24" fill="url(#ig)">
+      <defs>
+        <linearGradient id="ig" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#feda75"/>
+          <stop offset="50%" stop-color="#d62976"/>
+          <stop offset="100%" stop-color="#962fbf"/>
+        </linearGradient>
+      </defs>
+      <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 5.5A4.5 4.5 0 1112 16a4.5 4.5 0 010-9zm6 0a1 1 0 110 2 1 1 0 010-2z"/>
+    </svg>
+  </div>
+  <div class="text">
+    <b>Conócenos</b>
+    <span>@trampaclean</span>
+  </div>
+  <div class="arrow">›</div>
+</a>
+
+</section>
+
+</div>
 </body>
 </html>
