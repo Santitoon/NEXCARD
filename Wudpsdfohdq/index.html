@@ -1,239 +1,319 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Trampa Clean</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrampaClean - Regístrate</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --blue:#0E2644;
-  --blue2:#103051;
-  --orange:#FF4A00;
-  --bg:#F3F8FF;
-  --text:#0B1B33;
-  --muted:#55637c;
-}
 
-*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+--navy:#061A2D;
+--navy2:#0A2A4A;
+--navy3:#0F3B6A;
+--accent:#21A1FF;
+--ease:cubic-bezier(.22,1,.36,1);
+}
 
 body{
-  font-family:system-ui,-apple-system,Segoe UI,Roboto;
-  min-height:100vh;
-  background:
-  radial-gradient(800px 500px at 20% 10%,rgba(14,38,68,.08),transparent),
-  radial-gradient(700px 500px at 90% 30%,rgba(255,74,0,.08),transparent),
-  linear-gradient(180deg,#fff,var(--bg));
-  display:flex;
-  justify-content:center;
-}
-
-.wrap{
-  width:min(520px,92vw);
-  padding:24px 0 40px;
+font-family:'Open Sans',sans-serif;
+margin:0;
+background:linear-gradient(135deg,#eef4ff,#f7fbff);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
 }
 
 .card{
-  background:rgba(255,255,255,.65);
-  backdrop-filter:blur(22px);
-  border-radius:26px;
-  box-shadow:0 30px 80px rgba(0,0,0,.12);
-  overflow:hidden;
+width:100%;
+max-width:480px;
+background:white;
+border-radius:20px;
+box-shadow:0 24px 60px rgba(0,0,0,.14);
+overflow:hidden;
 }
 
-/* HEADER */
-.top{
-  background:linear-gradient(180deg,var(--blue2),var(--blue));
-  padding:26px 18px 20px;
-  text-align:center;
-  color:white;
+.header{
+background:linear-gradient(135deg,var(--navy),var(--navy3));
+text-align:center;
+padding:20px;
+color:white;
 }
 
-.logoBox{
-  width:220px;
-  height:90px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.brand-logo{
+width:80%;
+max-width:320px;
+margin:auto;
+display:block;
+border-radius:12px;
 }
 
-.logoBox img{
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;
+.form-section{
+padding:20px;
 }
 
-/* CONTENT */
-.content{
-  padding:24px;
-  text-align:center;
+.form-group{
+margin-bottom:14px;
 }
 
-.content h2{
-  font-size:22px;
-  margin-bottom:12px;
+label{
+font-weight:700;
+font-size:.85rem;
+display:block;
+margin-bottom:6px;
 }
 
-.content p{
-  font-size:14px;
-  color:var(--muted);
-  line-height:1.5;
+input,select{
+width:100%;
+height:48px;
+border-radius:12px;
+border:1px solid #ddd;
+padding:10px;
 }
 
-/* CTA */
-.ctaWrap{padding:0 24px 24px;}
-
-.cta{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:16px;
-  border-radius:18px;
-  background:linear-gradient(135deg,var(--orange),#ff7a40);
-  color:white;
-  text-decoration:none;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-  box-shadow:0 18px 50px rgba(255,74,0,.35);
-  transition:.2s;
+.submit-btn{
+width:100%;
+height:52px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,var(--navy),var(--navy3));
+color:white;
+font-weight:800;
+cursor:pointer;
 }
 
-.cta:hover{transform:translateY(-2px);}
-
-.note{
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  margin-top:10px;
+.custom-select select{
+display:none;
 }
 
-/* LINKS */
-.links{
-  display:grid;
-  gap:12px;
-  padding:16px;
+.select-display{
+border:1px solid #ddd;
+border-radius:12px;
+padding:12px;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-.link{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:16px;
-  border-radius:18px;
-  background:rgba(255,255,255,.7);
-  backdrop-filter:blur(16px);
-  text-decoration:none;
-  color:var(--text);
-  box-shadow:0 12px 30px rgba(0,0,0,.08);
-  transition:.2s;
+.options{
+max-height:0;
+overflow:hidden;
+transition:.3s;
+border-radius:12px;
 }
 
-.link:hover{transform:translateY(-3px);}
-
-.icon{
-  width:40px;
-  height:40px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.options.open{
+max-height:400px;
+box-shadow:0 10px 30px rgba(0,0,0,.1);
 }
 
-.icon svg{
-  width:26px;
-  height:26px;
+.option{
+padding:12px;
+cursor:pointer;
 }
 
-.icon img{
-  width:40px;
-  height:40px;
-  object-fit:contain;
+.option:hover{
+background:#eef6ff;
 }
 
-.text b{display:block;font-size:15px;}
-.text span{font-size:13px;color:var(--muted);}
-.arrow{margin-left:auto;opacity:.5;}
+/* CONTACTO ABAJO */
+
+.contact-strip{
+text-align:center;
+font-size:.85rem;
+margin-top:16px;
+display:flex;
+gap:10px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.contact-strip a{
+text-decoration:none;
+font-weight:700;
+color:var(--navy2);
+padding:6px 10px;
+border-radius:10px;
+}
+
+.contact-strip a:hover{
+background:#eef6ff;
+}
+
+.footer{
+text-align:center;
+font-size:.75rem;
+padding:14px;
+color:#666;
+}
+
 </style>
 </head>
 
 <body>
-<div class="wrap">
 
-<section class="card">
+<div class="card">
 
-<div class="top">
-  <div class="logoBox">
-    <img src="TCLOGO.png" alt="TCLOGO">
-  </div>
-</div>
+<div class="header">
 
-<div class="content">
-  <h1>evita emergencias, olores y sanciones en tu cocina</h1>
-</div>
+<img src="TCLOGO.png" class="brand-logo">
 
-<div class="ctaWrap">
-  <a class="cta"
-     href="https://nexcard-dev.github.io/NEXCARD/Wudpsdfohdq/form?empresa_id=trampaclean&vendedor=trampaclean"
-     target="_blank">
-     OBTEN TU 25% DE DESCUENTO
-  </a>
-  <div class="note">click aqui y recibe atención personalizada.</div>
-</div>
-
-</section>
-
-<section class="links">
-
-<a class="link" href="https://trampaclean.com" target="_blank">
-<div class="icon">
-
-<svg viewBox="0 0 24 24" fill="#2A8CFF">
-
-<path d="M12 2a10 10 0 100 20 10 10 0 000-20zm6.93 9h-3.1a15.7 15.7 0 00-.78-4.07A8.02 8.02 0 0118.93 11zM12 4c.77 1.06 1.47 3.02 1.73 5H10.3c.26-1.98.96-3.94 1.7-5zM4.07 13h3.1c.16 1.46.48 2.84.92 4.07A8.02 8.02 0 014.07 13zm3.1-2H4.07a8.02 8.02 0 014.02-4.07A15.7 15.7 0 007.17 11zm2.1 2h5.46c-.25 1.98-.96 3.94-1.73 5-.77-1.06-1.48-3.02-1.73-5zm0-2c.25-1.98.96-3.94 1.73-5 .77 1.06 1.48 3.02 1.73 5H9.27zm6.66 6.07c.44-1.23.76-2.61.92-4.07h3.1a8.02 8.02 0 01-4.02 4.07z"/>
-
-</svg>
+<h2>Regístrate</h2>
 
 </div>
-  <div class="text">
-    <b>Visita nuestra web</b>
-    <span>trampaclean.com</span>
-  </div>
-  <div class="arrow">›</div>
+
+<form id="registrationForm" class="form-section">
+
+<div class="form-group">
+<label>Nombre *</label>
+<input id="nombre" required>
+</div>
+
+<div class="form-group">
+<label>Email *</label>
+<input id="email" type="email" required>
+</div>
+
+<div class="form-group">
+<label>Teléfono</label>
+<input id="telefono">
+</div>
+
+
+<!-- SERVICIOS -->
+<div class="form-group custom-select">
+
+<label>Servicios de Interés</label>
+
+<div id="customDisplay" class="select-display">
+<span id="selectedText">Selecciona un servicio</span>
+▼
+</div>
+
+<div id="customOptions" class="options">
+
+<div class="option" data-value="Limpieza de Trampa de Grasa">
+Limpieza de Trampa de Grasa
+</div>
+
+<div class="option" data-value="Biodrexa FOG (tratamiento para grasas y aceites)">
+Biodrexa FOG (tratamiento para grasas y aceites)
+</div>
+
+<div class="option" data-value="Destape de tuberías obstruidas">
+Destape de tuberías obstruidas
+</div>
+
+<div class="option" data-value="Auditorías Técnicas">
+Auditorías Técnicas
+</div>
+
+<div class="option" data-value="Instalación de Trampa de Grasa">
+Instalación de Trampa de Grasa
+</div>
+
+<div class="option" data-value="Limpieza de Campana de cocina">
+Limpieza de Campana de cocina
+</div>
+
+</div>
+
+<select id="intereses">
+
+<option value="">Selecciona un servicio</option>
+
+<option>Limpieza de Trampa de Grasa</option>
+<option>Biodrexa FOG (tratamiento para grasas y aceites)</option>
+<option>Destape de tuberías obstruidas</option>
+<option>Auditorías Técnicas</option>
+<option>Instalación de Trampa de Grasa</option>
+<option>Limpieza de Campana de cocina</option>
+
+</select>
+
+</div>
+
+<button class="submit-btn">
+
+Registrarme
+
+</button>
+
+</form>
+
+
+<!-- CONTACTO -->
+
+<div class="contact-strip">
+
+<a href="tel:+50760000000">
+
+📞 Teléfono fijo +507 6000-0000
+
 </a>
 
-<a class="link"
-   href="https://wa.me/50763515950?text=Hola%20Trampa%20Clean%20vengo%20de%20la%20expo"
-   target="_blank">
-  <div class="icon">
-    <!-- WhatsApp Image -->
-    <img src="whatsapp.png" alt="WhatsApp">
-  </div>
-  <div class="text">
-    <b>Contáctanos</b>
-    <span>WhatsApp directo</span>
-  </div>
-  <div class="arrow">›</div>
-</a>
+•
 
-<a class="link" href="https://instagram.com/trampaclean" target="_blank">
-  <div class="icon">
-    <!-- Instagram Image -->
-    <img src="instagram.png" alt="Instagram">
-  </div>
-  <div class="text">
-    <b>Conócenos</b>
-    <span>@trampaclean</span>
-  </div>
-  <div class="arrow">›</div>
-</a>
+<a href="mailto:contacto@trampaclean.com">
 
-</section>
+✉️ contacto@trampaclean.com
+
+</a>
 
 </div>
+
+
+<div class="footer">
+
+Tus datos están protegidos.
+
+</div>
+
+</div>
+
+<script>
+
+const display=document.getElementById("customDisplay");
+const options=document.getElementById("customOptions");
+const text=document.getElementById("selectedText");
+const select=document.getElementById("intereses");
+
+display.onclick=()=>{
+
+options.classList.toggle("open");
+
+}
+
+document.querySelectorAll(".option").forEach(op=>{
+
+op.onclick=()=>{
+
+text.innerText=op.innerText;
+
+select.value=op.dataset.value;
+
+options.classList.remove("open");
+
+}
+
+});
+
+document.addEventListener("click",(e)=>{
+
+if(!display.contains(e.target)&&!options.contains(e.target)){
+
+options.classList.remove("open");
+
+}
+
+});
+
+</script>
+
 </body>
 </html>
-
-
-
-
