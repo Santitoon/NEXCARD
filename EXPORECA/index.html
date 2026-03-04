@@ -1,492 +1,563 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NEXCARD — Perfil Expo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXCARD — Perfil</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      /* === NEXCARD vibe (ajusta si quieres) === */
-      --bg0:#070A12;
-      --bg1:#0B1630;
-      --card: rgba(255,255,255,.08);
-      --card2: rgba(255,255,255,.12);
-      --stroke: rgba(255,255,255,.12);
+      /* Paleta inspirada en NEXCARD (claro + azul) */
+      --bg0:#F6FAFF;
+      --bg1:#ECF4FF;
+      --ink:#0B1220;
+      --muted:#55647A;
 
-      --text:#EAF0FF;
-      --muted: rgba(234,240,255,.72);
+      --brand:#1E63FF;
+      --brand2:#2F8BFF;
+      --brand3:#89D6FF;
 
-      --accent:#5B5FFF;   /* violeta/azul eléctrico */
-      --accent2:#21A1FF;  /* azul neon */
-      --good:#25D366;
-
-      --shadow: 0 28px 80px rgba(0,0,0,.55);
-      --shadow2: 0 14px 40px rgba(0,0,0,.35);
-
-      --r-xl: 26px;
-      --r-lg: 20px;
-      --r-md: 16px;
-
-      --maxw: 560px;
+      --card: rgba(255,255,255,.58);
+      --stroke: rgba(10,22,45,.12);
+      --shadow: 0 30px 90px rgba(10,26,60,.16);
+      --shadow2: 0 14px 40px rgba(10,26,60,.12);
       --ease: cubic-bezier(.22,1,.36,1);
+      --r-xl: 28px;
+      --r-lg: 20px;
     }
 
-    *{ margin:0; padding:0; box-sizing:border-box; }
-    html,body{ height:100%; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
     body{
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--ink);
       background:
-        radial-gradient(900px 600px at 18% 12%, rgba(91,95,255,.22), transparent 60%),
-        radial-gradient(900px 600px at 88% 30%, rgba(33,161,255,.18), transparent 60%),
-        radial-gradient(900px 600px at 50% 100%, rgba(255,255,255,.06), transparent 55%),
+        radial-gradient(1100px 780px at 20% 20%, rgba(46, 139, 255,.18), transparent 55%),
+        radial-gradient(900px 650px at 80% 35%, rgba(137, 214, 255,.18), transparent 55%),
         linear-gradient(135deg, var(--bg0), var(--bg1));
-      display:flex;
-      justify-content:center;
       overflow-x:hidden;
     }
 
-    /* sutil grid */
+    /* grid suave tipo landing */
     body::before{
       content:"";
-      position:fixed;
-      inset:0;
+      position:fixed; inset:0;
       pointer-events:none;
       background-image:
-        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
-      background-size: 44px 44px;
-      opacity:.18;
-      mask-image: radial-gradient(circle at 20% 10%, rgba(0,0,0,.9), rgba(0,0,0,.15) 55%, transparent 75%);
+        linear-gradient(to right, rgba(10,22,45,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(10,22,45,.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at 30% 20%, rgba(0,0,0,.85), rgba(0,0,0,.14) 58%, transparent 74%);
+      opacity:.35;
       z-index:0;
     }
 
+    /* blobs */
+    .blobs{
+      position:fixed; inset:-18%;
+      z-index:0; pointer-events:none;
+      filter: blur(42px);
+    }
+    .blobs::before, .blobs::after{
+      content:"";
+      position:absolute;
+      width:min(560px,72vw);
+      height:min(560px,72vw);
+      border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, rgba(30,99,255,.55), rgba(30,99,255,.08) 68%, transparent 72%);
+      animation: floatBlob 12s var(--ease) infinite;
+      will-change: transform;
+    }
+    .blobs::before{ top:6%; left:6%; }
+    .blobs::after{
+      bottom:2%; right:4%;
+      background: radial-gradient(circle at 30% 30%, rgba(137,214,255,.62), rgba(137,214,255,.10) 68%, transparent 72%);
+      animation-duration: 14s;
+      animation-direction: reverse;
+    }
+    @keyframes floatBlob{
+      0%{ transform: translate3d(0,0,0) scale(1); }
+      40%{ transform: translate3d(34px,-26px,0) scale(1.05); }
+      70%{ transform: translate3d(-16px,18px,0) scale(.98); }
+      100%{ transform: translate3d(0,0,0) scale(1); }
+    }
+
     .wrap{
-      width:min(var(--maxw), 92vw);
-      padding: 26px 0 42px;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: clamp(16px, 4vw, 34px);
       position:relative;
       z-index:1;
     }
 
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      border: 1px solid var(--stroke);
+    .shell{
+      width: min(980px, 100%);
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 22px;
+      align-items:stretch;
+    }
+
+    @media (max-width: 900px){
+      .shell{ grid-template-columns: 1fr; }
+    }
+
+    .hero{
       border-radius: var(--r-xl);
+      background: var(--card);
+      border: 1px solid var(--stroke);
       box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       overflow:hidden;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      position:relative;
+      transform: translateY(10px);
+      opacity:0;
+      animation: in .75s var(--ease) forwards;
     }
 
-    /* TOP */
-    .top{
-      padding: 22px 18px 18px;
+    @keyframes in{ to{ transform: translateY(0); opacity:1; } }
+
+    .heroTop{
+      padding: 22px 22px 16px;
       background:
-        radial-gradient(900px 260px at 15% 0%, rgba(33,161,255,.26), transparent 55%),
-        radial-gradient(900px 260px at 85% 0%, rgba(91,95,255,.30), transparent 55%),
-        linear-gradient(135deg, rgba(10,18,38,.95), rgba(5,10,22,.92));
-      border-bottom: 1px solid rgba(255,255,255,.10);
-      position:relative;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .brand-left{
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .mark{
-      width:44px;
-      height:44px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(91,95,255,.55), rgba(33,161,255,.50));
-      box-shadow: 0 16px 40px rgba(0,0,0,.35);
-      border: 1px solid rgba(255,255,255,.18);
+        radial-gradient(900px 340px at 15% 0%, rgba(137,214,255,.35), transparent 55%),
+        linear-gradient(135deg, rgba(30,99,255,.92), rgba(47,139,255,.86));
+      border-bottom: 1px solid rgba(255,255,255,.22);
       position:relative;
       overflow:hidden;
     }
-    .mark::after{
+
+    .heroTop::after{
       content:"";
       position:absolute;
-      inset:-60%;
-      background: conic-gradient(from 180deg, rgba(255,255,255,0), rgba(255,255,255,.25), rgba(255,255,255,0));
-      animation: spin 4.8s linear infinite;
-      opacity:.8;
-    }
-    @keyframes spin{ to{ transform: rotate(360deg); } }
-
-    .brand-title{
-      line-height:1.05;
-      min-width:0;
-    }
-    .brand-title .name{
-      font-weight:900;
-      letter-spacing:.04em;
-      font-size: 16px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .brand-title .sub{
-      margin-top: 4px;
-      font-size: 12px;
-      color: rgba(234,240,255,.72);
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      inset:-2px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.16), transparent 36%),
+        radial-gradient(circle at 80% 0%, rgba(255,255,255,.14), transparent 42%),
+        radial-gradient(circle at 50% 120%, rgba(255,255,255,.12), transparent 46%);
+      opacity:.9;
+      pointer-events:none;
     }
 
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.08);
-      color: rgba(234,240,255,.92);
-      font-weight: 700;
-      font-size: 12px;
-      box-shadow: var(--shadow2);
-      white-space:nowrap;
-    }
-
-    /* profile */
-    .profile{
+    .brandRow{
       display:flex;
       align-items:center;
-      gap: 14px;
-      margin-top: 6px;
+      gap:14px;
+      position:relative;
+      z-index:2;
     }
 
-    .avatar{
-      width: 72px;
-      height: 72px;
-      border-radius: 22px;
+    /* LOGO (pon tu archivo en la misma carpeta) */
+    .logoBox{
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.28);
+      box-shadow: 0 18px 46px rgba(0,0,0,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
       overflow:hidden;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-      box-shadow: 0 20px 46px rgba(0,0,0,.35);
       flex: 0 0 auto;
     }
-    .avatar img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
+    .logoBox img{
+      width: 86%;
+      height: 86%;
+      object-fit: contain;
       display:block;
+      filter: drop-shadow(0 10px 26px rgba(0,0,0,.18));
+    }
+    /* fallback si no hay imagen */
+    .logoFallback{
+      width: 26px;height:26px;border-radius:9px;
+      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(255,255,255,.65));
     }
 
-    .who{
-      min-width:0;
-    }
-    .who h1{
-      font-size: 20px;
-      font-weight: 900;
-      letter-spacing: -0.01em;
+    .brandText small{
+      display:block;
+      color: rgba(255,255,255,.88);
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: 11px;
       margin-bottom: 4px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
     }
-    .who p{
-      color: var(--muted);
-      font-size: 13px;
-      line-height:1.35;
+    .brandText h1{
+      color:#fff;
+      font-size: clamp(1.25rem, 3.2vw, 1.7rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
     }
 
-    /* content */
-    .content{
-      padding: 18px;
-      text-align:center;
+    .heroBody{
+      padding: 18px 22px 22px;
     }
 
     .headline{
-      font-size: 20px;
+      font-size: clamp(1.55rem, 4.4vw, 2.15rem);
       font-weight: 900;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      line-height: 1.06;
       margin-bottom: 10px;
+    }
+    .headline .accent{
+      color: var(--brand);
+      text-shadow: 0 16px 34px rgba(30,99,255,.22);
     }
 
     .desc{
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.55;
+      font-size: 1.02rem;
+      line-height: 1.6;
       margin-bottom: 16px;
     }
 
-    .ctaWrap{
-      padding: 0 18px 18px;
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom: 16px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(10,22,45,.10);
+      background: rgba(255,255,255,.55);
+      box-shadow: 0 10px 26px rgba(10,26,60,.08);
+      color: rgba(11,18,32,.85);
+      font-weight: 700;
+      font-size: .92rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .dot{
+      width: 9px; height: 9px;
+      border-radius: 99px;
+      background: linear-gradient(135deg, var(--brand), var(--brand3));
+      box-shadow: 0 10px 18px rgba(30,99,255,.25);
     }
 
-    .cta{
+    .ctaRow{
       display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top: 6px;
+    }
+    .btn{
+      appearance:none;
+      border: 0;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap: 10px;
-      padding: 16px 14px;
-      border-radius: 18px;
-      text-decoration:none;
-      color: white;
+      gap:10px;
+      height: 50px;
+      padding: 0 16px;
+      border-radius: 16px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btnPrimary{
+      color:#fff;
+      background:
+        radial-gradient(180px 120px at 20% 10%, rgba(137,214,255,.48), transparent 55%),
+        linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 18px 46px rgba(30,99,255,.28);
+    }
+    .btnGlass{
+      color: rgba(11,18,32,.92);
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(10,22,45,.12);
+      box-shadow: 0 14px 40px rgba(10,26,60,.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .btn:hover{ transform: translateY(-2px); filter: saturate(1.05); }
+    .btn:active{ transform: translateY(0) scale(.98); }
+
+    /* panel de botones estilo “menu” */
+    .menu{
+      border-radius: var(--r-xl);
+      background: rgba(255,255,255,.56);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      overflow:hidden;
+      transform: translateY(10px);
+      opacity:0;
+      animation: in .75s var(--ease) .08s forwards;
+    }
+
+    .menuHeader{
+      padding: 18px 18px 12px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .menuHeader h2{
+      font-size: 1.05rem;
       font-weight: 900;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 18px 50px rgba(33,161,255,.25), 0 18px 50px rgba(91,95,255,.18);
-      border: 1px solid rgba(255,255,255,.16);
-      transition: transform .18s var(--ease);
+      letter-spacing: -0.01em;
     }
-    .cta:hover{ transform: translateY(-2px); }
-
-    .cta small{
-      display:block;
-      letter-spacing:0;
-      text-transform:none;
-      font-weight:700;
-      opacity:.92;
+    .menuHeader p{
+      color: var(--muted);
+      font-size: .92rem;
+      margin-top: 4px;
+      line-height:1.4;
     }
 
-    /* links */
-    .links{
-      margin-top: 16px;
-      display:grid;
+    .menuList{
+      padding: 8px 14px 16px;
+      display:flex;
+      flex-direction:column;
       gap: 12px;
     }
 
-    .link{
+    .item{
+      text-decoration:none;
       display:flex;
       align-items:center;
       gap: 14px;
       padding: 14px 14px;
       border-radius: 18px;
-      text-decoration:none;
-      color: var(--text);
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      transition: transform .18s var(--ease), background .18s var(--ease);
+      border: 1px solid rgba(10,22,45,.10);
+      background: rgba(255,255,255,.70);
+      box-shadow: 0 14px 34px rgba(10,26,60,.10);
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+      position:relative;
+      overflow:hidden;
     }
-    .link:hover{
+    .item:hover{
       transform: translateY(-2px);
-      background: rgba(255,255,255,.10);
+      box-shadow: 0 18px 44px rgba(10,26,60,.14);
     }
 
-    .iconImg{
+    .icon{
       width: 44px;
       height: 44px;
-      border-radius: 14px;
+      border-radius: 16px;
       display:flex;
       align-items:center;
       justify-content:center;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
-      overflow:hidden;
+      background: rgba(30,99,255,.10);
+      border: 1px solid rgba(30,99,255,.16);
       flex: 0 0 auto;
     }
-    .iconImg img{
-      width: 70%;
-      height: 70%;
-      object-fit: contain;
-      display:block;
-    }
+    .icon svg{ width: 22px; height: 22px; color: var(--brand); }
 
-    .t{
+    .txt{
       min-width:0;
-      text-align:left;
+      flex: 1 1 auto;
     }
-    .t b{
+    .txt b{
       display:block;
-      font-size: 15px;
       font-weight: 900;
+      color: rgba(11,18,32,.95);
+      letter-spacing: -0.01em;
       margin-bottom: 2px;
     }
-    .t span{
+    .txt span{
       display:block;
-      font-size: 13px;
-      color: var(--muted);
-      white-space:nowrap;
+      color: rgba(85,100,122,.95);
+      font-weight: 700;
+      font-size: .92rem;
       overflow:hidden;
       text-overflow:ellipsis;
-    }
-    .arrow{
-      margin-left:auto;
-      opacity:.55;
-      font-size: 20px;
-      line-height:1;
+      white-space:nowrap;
     }
 
-    .note{
-      text-align:center;
-      margin-top: 10px;
-      font-size: 12px;
-      color: rgba(234,240,255,.62);
+    .chev{
+      width: 26px; height: 26px;
+      border-radius: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(10,22,45,.04);
+      border: 1px solid rgba(10,22,45,.06);
+      flex: 0 0 auto;
+    }
+    .chev svg{ width: 16px; height: 16px; color: rgba(11,18,32,.65); }
+
+    .footNote{
+      padding: 0 18px 18px;
+      color: rgba(85,100,122,.88);
+      font-size: .85rem;
+      line-height:1.5;
     }
 
-    .footerMini{
-      margin-top: 16px;
-      text-align:center;
-      color: rgba(234,240,255,.55);
-      font-size: 11px;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-    }
-
-    @media (max-width: 420px){
-      .who h1{ font-size: 18px; }
-      .headline{ font-size: 18px; }
-      .avatar{ width:66px; height:66px; border-radius: 20px; }
-      .mark{ width:40px; height:40px; border-radius: 13px; }
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition: none !important; }
+      .blobs{ display:none; }
+      .hero,.menu{ opacity:1; transform:none; }
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
+  <div class="blobs"></div>
 
-    <section class="card">
-      <div class="top">
-        <div class="brand">
-          <div class="brand-left">
-            <div class="mark" aria-hidden="true"></div>
-            <div class="brand-title">
-              <div class="name">NEXCARD</div>
-              <div class="sub">EXPO · PERFIL</div>
+  <main class="wrap">
+    <section class="shell">
+
+      <!-- BLOQUE PRINCIPAL -->
+      <article class="hero">
+        <div class="heroTop">
+          <div class="brandRow">
+            <div class="logoBox" aria-label="Logo NEXCARD">
+              <!-- ✅ Cambia el src por tu logo -->
+              <img src="NEXCARD_LOGO.png" alt="NEXCARD" onerror="this.remove(); document.getElementById('fallback').style.display='block';">
+              <div id="fallback" class="logoFallback" style="display:none"></div>
+            </div>
+
+            <div class="brandText">
+              <small>NFC + QR • Leads a Sheets</small>
+              <h1>NEXCARD</h1>
             </div>
           </div>
-
-          <!-- (OPCIONAL) Puedes poner aquí “Disponible para demos” -->
-          <div class="pill">✨ Demo en 1 minuto</div>
         </div>
 
-        <div class="profile">
-          <div class="avatar">
-            <!-- ✅ 1) CAMBIA TU FOTO AQUÍ (pon tu archivo en la misma carpeta) -->
-            <img src="YOUR_PHOTO.jpg" alt="Foto de Santiago" />
+        <div class="heroBody">
+          <div class="headline">
+            Tu tarjeta <span class="accent">NFC/QR</span><br/>
+            para captar clientes en segundos.
           </div>
 
-          <div class="who">
-            <!-- ✅ 2) CAMBIA TU NOMBRE / CARGO -->
-            <h1>Santiago Magallanes</h1>
-            <p>
-              Fundador · NEXCARD<br>
-              Tarjetas NFC + QR para captar clientes al instante
-            </p>
+          <p class="desc">
+            Escanean, ven tu presentación y te dejan sus datos.
+            Todo queda organizado automáticamente para que puedas hacer seguimiento.
+          </p>
+
+          <div class="chips" aria-label="Características">
+            <div class="chip"><span class="dot"></span> Captura instantánea</div>
+            <div class="chip"><span class="dot"></span> Diseño premium</div>
+            <div class="chip"><span class="dot"></span> Flujo simple</div>
+          </div>
+
+          <!-- Botones rápidos -->
+          <div class="ctaRow">
+            <a class="btn btnPrimary" href="https://nexcard-dev.github.io/NEXCARD/" target="_blank" rel="noopener">
+              Ver NEXCARD
+              <span aria-hidden="true">→</span>
+            </a>
+            <a class="btn btnGlass" href="mailto:info@nexcard.com?subject=Quiero%20NEXCARD">
+              Email
+            </a>
           </div>
         </div>
-      </div>
+      </article>
 
-      <div class="content">
-        <div class="headline">Convierte cada contacto en un lead</div>
-        <div class="desc">
-          Escanea mi tarjeta y recibe mi información. Si quieres, te muestro cómo NEXCARD
-          captura contactos y los manda directo a tu dashboard.
+      <!-- MENÚ DE ACCIONES (como en tu screenshot) -->
+      <aside class="menu">
+        <div class="menuHeader">
+          <div>
+            <h2>Contacto directo</h2>
+            <p>Elige una opción para comunicarte o ver la web.</p>
+          </div>
         </div>
-      </div>
 
-      <div class="ctaWrap">
-        <!-- ✅ 3) TU CTA PRINCIPAL (pon el link que tú quieras) -->
-        <!-- Ejemplo: llevar a tu formulario personal (empresa_id=nexcard, vendedor=santiago) -->
-        <a class="cta" href="https://nexcard-dev.github.io/NEXCARD/" target="_blank" rel="noopener">
-          QUIERO UNA DEMO
-        </a>
-        <div class="note">Toque rápido · Respuesta inmediata</div>
-
-        <div class="links">
-
-          <!-- ORDEN QUE PEDISTE / ESTILO NEXCARD -->
-
-          <!-- 1) WHATSAPP -->
-          <a class="link" href="https://wa.me/50764699159?text=Hola%20Santiago%2C%20vi%20tu%20tarjeta%20NEXCARD%20en%20la%20expo%20y%20quiero%20info." target="_blank" rel="noopener">
-            <div class="iconImg">
-              <!-- Cambia a tu ruta real en el repo -->
-              <img src="whatsapp.png" alt="WhatsApp">
+        <div class="menuList">
+          <!-- 1) Llamada directa -->
+          <a class="item" href="tel:+50760120078">
+            <div class="icon" aria-hidden="true">
+              <!-- phone -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.2 2.2z"/>
+              </svg>
             </div>
-            <div class="t">
-              <b>WhatsApp</b>
-              <span>Escríbeme ahora</span>
-            </div>
-            <div class="arrow">›</div>
-          </a>
-
-          <!-- 2) PÁGINA WEB -->
-          <a class="link" href="https://nexcard-dev.github.io/NEXCARD/" target="_blank" rel="noopener">
-            <div class="iconImg">
-              <img src="web.png" alt="Web">
-            </div>
-            <div class="t">
-              <b>Página web</b>
-              <span>nexcard-dev.github.io/NEXCARD/</span>
-            </div>
-            <div class="arrow">›</div>
-          </a>
-
-          <!-- 3) INSTAGRAM -->
-          <a class="link" href="https://instagram.com/" target="_blank" rel="noopener">
-            <div class="iconImg">
-              <img src="instagram.png" alt="Instagram">
-            </div>
-            <div class="t">
-              <b>Instagram</b>
-              <span>@nexcard</span>
-            </div>
-            <div class="arrow">›</div>
-          </a>
-
-          <!-- 4) CORREO -->
-          <a class="link" href="mailto:santiagialm@gmail.com?subject=Info%20NEXCARD%20(EXPO)&body=Hola%20Santiago%2C%20me%20interesa%20NEXCARD.%20Mi%20empresa%20es%3A%20_____%20y%20quiero%20una%20demo." target="_blank" rel="noopener">
-            <div class="iconImg">
-              <img src="mail.png" alt="Correo">
-            </div>
-            <div class="t">
-              <b>Correo</b>
-              <span>santiagialm@gmail.com</span>
-            </div>
-            <div class="arrow">›</div>
-          </a>
-
-          <!-- 5) TELÉFONO -->
-          <a class="link" href="tel:+50764699159">
-            <div class="iconImg">
-              <img src="phone.png" alt="Teléfono">
-            </div>
-            <div class="t">
+            <div class="txt">
               <b>Llamar</b>
+              <span>+507 6012-0078</span>
+            </div>
+            <div class="chev" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </div>
+          </a>
+
+          <!-- 2) WhatsApp -->
+          <a class="item" href="https://wa.me/50764699159" target="_blank" rel="noopener">
+            <div class="icon" aria-hidden="true">
+              <!-- whatsapp-ish bubble -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.52 3.48A11.91 11.91 0 0012.01 0C5.39 0 .02 5.37.02 11.99c0 2.11.55 4.17 1.6 6L0 24l6.18-1.6a12 12 0 005.83 1.49h.01c6.62 0 12-5.38 12-12 0-3.2-1.25-6.2-3.5-8.41zM12.02 21.86h-.01a9.9 9.9 0 01-5.05-1.39l-.36-.21-3.67.95.98-3.58-.23-.37a9.87 9.87 0 01-1.52-5.27c0-5.46 4.45-9.91 9.93-9.91 2.65 0 5.14 1.03 7.01 2.9a9.83 9.83 0 012.9 7c0 5.47-4.45 9.91-9.98 9.91zm5.44-7.41c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.66.15-.2.3-.76.97-.93 1.17-.17.2-.34.22-.64.07-.3-.15-1.25-.46-2.38-1.48-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.34.45-.5.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.66-1.6-.9-2.2-.24-.58-.48-.5-.66-.5h-.56c-.2 0-.52.07-.8.37-.27.3-1.05 1.02-1.05 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.35.19 1.86.11.57-.08 1.77-.72 2.02-1.41.25-.69.25-1.28.17-1.41-.08-.13-.27-.2-.57-.35z"/>
+              </svg>
+            </div>
+            <div class="txt">
+              <b>WhatsApp</b>
               <span>+507 6469-9159</span>
             </div>
-            <div class="arrow">›</div>
+            <div class="chev" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </div>
           </a>
 
-          <!-- 6) PDF (portafolio / brochure) -->
-          <a class="link" href="brochure.pdf" target="_blank" rel="noopener">
-            <div class="iconImg">
-              <img src="pdf.png" alt="PDF">
+          <!-- 3) Correo -->
+          <a class="item" href="mailto:santiagialm@gmail.com?subject=NEXCARD%20-%20Quiero%20informaci%C3%B3n">
+            <div class="icon" aria-hidden="true">
+              <!-- mail -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+              </svg>
             </div>
-            <div class="t">
-              <b>PDF</b>
-              <span>Ver brochure / presentación</span>
+            <div class="txt">
+              <b>Correo electrónico</b>
+              <span>santiagialm@gmail.com</span>
             </div>
-            <div class="arrow">›</div>
+            <div class="chev" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </div>
           </a>
 
+          <!-- 4) Web principal -->
+          <a class="item" href="https://nexcard-dev.github.io/NEXCARD/" target="_blank" rel="noopener">
+            <div class="icon" aria-hidden="true">
+              <!-- globe -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm7.93 9h-3.04a15.7 15.7 0 00-1.3-6.02A8.02 8.02 0 0119.93 11zM12 4c.9 0 2.48 2.08 3.27 7H8.73C9.52 6.08 11.1 4 12 4zM4.07 13h3.04c.21 2.15.74 4.22 1.3 6.02A8.02 8.02 0 014.07 13zm3.04-2H4.07a8.02 8.02 0 014.38-6.02A15.7 15.7 0 007.11 11zM12 20c-.9 0-2.48-2.08-3.27-7h6.54c-.79 4.92-2.37 7-3.27 7zm3.62-.98c.56-1.8 1.09-3.87 1.3-6.02h3.04a8.02 8.02 0 01-4.34 6.04z"/>
+              </svg>
+            </div>
+            <div class="txt">
+              <b>Web principal</b>
+              <span>nexcard-dev.github.io/NEXCARD/</span>
+            </div>
+            <div class="chev" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </div>
+          </a>
         </div>
 
-        <div class="footerMini">NEXCARD · NFC + QR · Dashboard Empresarial</div>
-      </div>
-    </section>
+        <div class="footNote">
+          Tip: coloca tu logo como <b>NEXCARD_LOGO.png</b> en la misma carpeta de este HTML para que se vea perfecto.
+        </div>
+      </aside>
 
-  </div>
+    </section>
+  </main>
 </body>
 </html>
