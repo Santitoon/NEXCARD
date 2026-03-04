@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NEXCARD — Perfil Expo</title>
+
+  <style>
+    :root{
+      /* === NEXCARD vibe (ajusta si quieres) === */
+      --bg0:#070A12;
+      --bg1:#0B1630;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.12);
+      --stroke: rgba(255,255,255,.12);
+
+      --text:#EAF0FF;
+      --muted: rgba(234,240,255,.72);
+
+      --accent:#5B5FFF;   /* violeta/azul eléctrico */
+      --accent2:#21A1FF;  /* azul neon */
+      --good:#25D366;
+
+      --shadow: 0 28px 80px rgba(0,0,0,.55);
+      --shadow2: 0 14px 40px rgba(0,0,0,.35);
+
+      --r-xl: 26px;
+      --r-lg: 20px;
+      --r-md: 16px;
+
+      --maxw: 560px;
+      --ease: cubic-bezier(.22,1,.36,1);
+    }
+
+    *{ margin:0; padding:0; box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 600px at 18% 12%, rgba(91,95,255,.22), transparent 60%),
+        radial-gradient(900px 600px at 88% 30%, rgba(33,161,255,.18), transparent 60%),
+        radial-gradient(900px 600px at 50% 100%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(135deg, var(--bg0), var(--bg1));
+      display:flex;
+      justify-content:center;
+      overflow-x:hidden;
+    }
+
+    /* sutil grid */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 44px 44px;
+      opacity:.18;
+      mask-image: radial-gradient(circle at 20% 10%, rgba(0,0,0,.9), rgba(0,0,0,.15) 55%, transparent 75%);
+      z-index:0;
+    }
+
+    .wrap{
+      width:min(var(--maxw), 92vw);
+      padding: 26px 0 42px;
+      position:relative;
+      z-index:1;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border: 1px solid var(--stroke);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    /* TOP */
+    .top{
+      padding: 22px 18px 18px;
+      background:
+        radial-gradient(900px 260px at 15% 0%, rgba(33,161,255,.26), transparent 55%),
+        radial-gradient(900px 260px at 85% 0%, rgba(91,95,255,.30), transparent 55%),
+        linear-gradient(135deg, rgba(10,18,38,.95), rgba(5,10,22,.92));
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      position:relative;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand-left{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .mark{
+      width:44px;
+      height:44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(91,95,255,.55), rgba(33,161,255,.50));
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.18);
+      position:relative;
+      overflow:hidden;
+    }
+    .mark::after{
+      content:"";
+      position:absolute;
+      inset:-60%;
+      background: conic-gradient(from 180deg, rgba(255,255,255,0), rgba(255,255,255,.25), rgba(255,255,255,0));
+      animation: spin 4.8s linear infinite;
+      opacity:.8;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+
+    .brand-title{
+      line-height:1.05;
+      min-width:0;
+    }
+    .brand-title .name{
+      font-weight:900;
+      letter-spacing:.04em;
+      font-size: 16px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brand-title .sub{
+      margin-top: 4px;
+      font-size: 12px;
+      color: rgba(234,240,255,.72);
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: rgba(234,240,255,.92);
+      font-weight: 700;
+      font-size: 12px;
+      box-shadow: var(--shadow2);
+      white-space:nowrap;
+    }
+
+    /* profile */
+    .profile{
+      display:flex;
+      align-items:center;
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .avatar{
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 20px 46px rgba(0,0,0,.35);
+      flex: 0 0 auto;
+    }
+    .avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .who{
+      min-width:0;
+    }
+    .who h1{
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .who p{
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.35;
+    }
+
+    /* content */
+    .content{
+      padding: 18px;
+      text-align:center;
+    }
+
+    .headline{
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .desc{
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .ctaWrap{
+      padding: 0 18px 18px;
+    }
+
+    .cta{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 16px 14px;
+      border-radius: 18px;
+      text-decoration:none;
+      color: white;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 18px 50px rgba(33,161,255,.25), 0 18px 50px rgba(91,95,255,.18);
+      border: 1px solid rgba(255,255,255,.16);
+      transition: transform .18s var(--ease);
+    }
+    .cta:hover{ transform: translateY(-2px); }
+
+    .cta small{
+      display:block;
+      letter-spacing:0;
+      text-transform:none;
+      font-weight:700;
+      opacity:.92;
+    }
+
+    /* links */
+    .links{
+      margin-top: 16px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .link{
+      display:flex;
+      align-items:center;
+      gap: 14px;
+      padding: 14px 14px;
+      border-radius: 18px;
+      text-decoration:none;
+      color: var(--text);
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform .18s var(--ease), background .18s var(--ease);
+    }
+    .link:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.10);
+    }
+
+    .iconImg{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+      flex: 0 0 auto;
+    }
+    .iconImg img{
+      width: 70%;
+      height: 70%;
+      object-fit: contain;
+      display:block;
+    }
+
+    .t{
+      min-width:0;
+      text-align:left;
+    }
+    .t b{
+      display:block;
+      font-size: 15px;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+    .t span{
+      display:block;
+      font-size: 13px;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .arrow{
+      margin-left:auto;
+      opacity:.55;
+      font-size: 20px;
+      line-height:1;
+    }
+
+    .note{
+      text-align:center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(234,240,255,.62);
+    }
+
+    .footerMini{
+      margin-top: 16px;
+      text-align:center;
+      color: rgba(234,240,255,.55);
+      font-size: 11px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+
+    @media (max-width: 420px){
+      .who h1{ font-size: 18px; }
+      .headline{ font-size: 18px; }
+      .avatar{ width:66px; height:66px; border-radius: 20px; }
+      .mark{ width:40px; height:40px; border-radius: 13px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <section class="card">
+      <div class="top">
+        <div class="brand">
+          <div class="brand-left">
+            <div class="mark" aria-hidden="true"></div>
+            <div class="brand-title">
+              <div class="name">NEXCARD</div>
+              <div class="sub">EXPO · PERFIL</div>
+            </div>
+          </div>
+
+          <!-- (OPCIONAL) Puedes poner aquí “Disponible para demos” -->
+          <div class="pill">✨ Demo en 1 minuto</div>
+        </div>
+
+        <div class="profile">
+          <div class="avatar">
+            <!-- ✅ 1) CAMBIA TU FOTO AQUÍ (pon tu archivo en la misma carpeta) -->
+            <img src="YOUR_PHOTO.jpg" alt="Foto de Santiago" />
+          </div>
+
+          <div class="who">
+            <!-- ✅ 2) CAMBIA TU NOMBRE / CARGO -->
+            <h1>Santiago Magallanes</h1>
+            <p>
+              Fundador · NEXCARD<br>
+              Tarjetas NFC + QR para captar clientes al instante
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="headline">Convierte cada contacto en un lead</div>
+        <div class="desc">
+          Escanea mi tarjeta y recibe mi información. Si quieres, te muestro cómo NEXCARD
+          captura contactos y los manda directo a tu dashboard.
+        </div>
+      </div>
+
+      <div class="ctaWrap">
+        <!-- ✅ 3) TU CTA PRINCIPAL (pon el link que tú quieras) -->
+        <!-- Ejemplo: llevar a tu formulario personal (empresa_id=nexcard, vendedor=santiago) -->
+        <a class="cta" href="https://nexcard-dev.github.io/NEXCARD/" target="_blank" rel="noopener">
+          QUIERO UNA DEMO
+        </a>
+        <div class="note">Toque rápido · Respuesta inmediata</div>
+
+        <div class="links">
+
+          <!-- ORDEN QUE PEDISTE / ESTILO NEXCARD -->
+
+          <!-- 1) WHATSAPP -->
+          <a class="link" href="https://wa.me/50764699159?text=Hola%20Santiago%2C%20vi%20tu%20tarjeta%20NEXCARD%20en%20la%20expo%20y%20quiero%20info." target="_blank" rel="noopener">
+            <div class="iconImg">
+              <!-- Cambia a tu ruta real en el repo -->
+              <img src="whatsapp.png" alt="WhatsApp">
+            </div>
+            <div class="t">
+              <b>WhatsApp</b>
+              <span>Escríbeme ahora</span>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+
+          <!-- 2) PÁGINA WEB -->
+          <a class="link" href="https://nexcard-dev.github.io/NEXCARD/" target="_blank" rel="noopener">
+            <div class="iconImg">
+              <img src="web.png" alt="Web">
+            </div>
+            <div class="t">
+              <b>Página web</b>
+              <span>nexcard-dev.github.io/NEXCARD/</span>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+
+          <!-- 3) INSTAGRAM -->
+          <a class="link" href="https://instagram.com/" target="_blank" rel="noopener">
+            <div class="iconImg">
+              <img src="instagram.png" alt="Instagram">
+            </div>
+            <div class="t">
+              <b>Instagram</b>
+              <span>@nexcard</span>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+
+          <!-- 4) CORREO -->
+          <a class="link" href="mailto:santiagialm@gmail.com?subject=Info%20NEXCARD%20(EXPO)&body=Hola%20Santiago%2C%20me%20interesa%20NEXCARD.%20Mi%20empresa%20es%3A%20_____%20y%20quiero%20una%20demo." target="_blank" rel="noopener">
+            <div class="iconImg">
+              <img src="mail.png" alt="Correo">
+            </div>
+            <div class="t">
+              <b>Correo</b>
+              <span>santiagialm@gmail.com</span>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+
+          <!-- 5) TELÉFONO -->
+          <a class="link" href="tel:+50764699159">
+            <div class="iconImg">
+              <img src="phone.png" alt="Teléfono">
+            </div>
+            <div class="t">
+              <b>Llamar</b>
+              <span>+507 6469-9159</span>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+
+          <!-- 6) PDF (portafolio / brochure) -->
+          <a class="link" href="brochure.pdf" target="_blank" rel="noopener">
+            <div class="iconImg">
+              <img src="pdf.png" alt="PDF">
+            </div>
+            <div class="t">
+              <b>PDF</b>
+              <span>Ver brochure / presentación</span>
+            </div>
+            <div class="arrow">›</div>
+          </a>
+
+        </div>
+
+        <div class="footerMini">NEXCARD · NFC + QR · Dashboard Empresarial</div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
